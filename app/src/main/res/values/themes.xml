@@ -1,0 +1,21 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.PlotDash" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#34637f</item>
+        <item name="colorPrimaryVariant">#1c3245</item>
+        <item name="colorOnPrimary">#6ba4a8</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#d1d9c4</item>
+        <item name="colorSecondaryVariant">#f5cc5c</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="colorOnBackground">@color/white</item>
+        <item name="editTextColor">#121212</item>
+        <item name="editTextBackground">@color/white</item>
+        <item name="colorPrimaryInverse">#121212</item>
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <item
+        android:id="@+id/profile"
+        android:title="ajustes"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/subMenuOP1"
+                android:title="Cerrar Sesión"
+                android:icon="@drawable/baseline_logout_24"></item>
+            <item
+                android:id="@+id/subMenuOP2"
+                android:title="Ajustes"
+                android:icon="@drawable/baseline_settings_24"
+                android:iconTint="?attr/colorOnPrimary"></item>
+        </menu>
+    </item>
+</menu>

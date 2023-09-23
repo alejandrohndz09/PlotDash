@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:scrollbars="vertical"
+    tools:context=".FormHistoriaActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            <!--formulario-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingVertical="5dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="25dp"
+                    android:orientation="horizontal">
+
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/historiaItem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginVertical="8dp"
+                        android:elevation="18dp"
+                        android:translationZ="5dp"
+                        app:cardCornerRadius="5dp">
+
+                        <Button
+                            android:id="@+id/btnPortada"
+                            android:layout_width="100dp"
+                            android:layout_height="125dp"
+                            android:backgroundTint="?attr/editTextBackground"
+                            android:paddingTop="25dp"
+                            android:drawableTop="@android:drawable/ic_menu_add"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:text="Añadir Portada"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+
+                    </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="15dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:paddingLeft="6dp"
+                                android:textColor="?attr/colorOnSecondary"
+                                android:maxLines="3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Título"
+                                android:textSize="25sp"
+                                android:textStyle="bold"/>
+
+
+                            <EditText
+                                android:id="@+id/titulo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginVertical="3dp"
+                                android:minHeight="45dp"
+                                android:background="@drawable/edittext"
+                                android:elevation="5dp"
+                                android:padding="8dp"
+                                android:importantForAutofill="no" />
+                        </LinearLayout>
+
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:maxLines="6"
+                        android:paddingLeft="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Descripción"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSecondary"
+                        android:textSize="18sp"
+                        />
+                    <EditText
+                        android:id="@+id/descripcion"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginVertical="3dp"
+                        android:background="@drawable/edittext"
+                        android:elevation="5dp"
+                        android:ems="10"
+                        android:gravity="left|top"
+                        android:inputType="textMultiLine"
+                        android:padding="8dp"
+                        android:scrollbars="vertical"
+                        android:importantForAutofill="no" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:paddingLeft="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Género"
+                        android:textColor="?attr/colorOnSecondary"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        />
+
+                    <Spinner
+                        android:id="@+id/genero"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginVertical="3dp"
+                        android:focusable="true"
+                        android:background="@drawable/spinner"
+                        android:elevation="5dp"
+                        android:padding="8dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--linea divisoria-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/edittext"
+                android:elevation="3dp"
+                android:orientation="vertical" />
+            <!--Lista de capitulos-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingHorizontal="25dp">
+                <ListView
+                    android:id="@+id/caps"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom">
+        <!--linea divisoria-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/edittext"
+            android:elevation="3dp"
+            android:orientation="vertical" />
+        <!--Panel agregar Capitulo-->
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:gravity="end|center_vertical"
+            android:backgroundTint="?attr/colorOnBackground"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="Agregar Capítulo"
+            android:drawableRight="@drawable/outline_playlist_add_24"
+           />
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/opHome"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/outline_dashboard_24"
+        android:title="Dashboard"/>
+    <item
+        android:id="@+id/opLibrary"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/libs"
+        android:title="Biblioteca"/>
+    <item
+        android:id="@+id/opWrite"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/write_icon"
+        android:title="Nueva"/>
+    <item
+        android:id="@+id/opAjustes"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/settings_svgrepo_com"
+        android:title="Ajustes"/>
+</menu>
