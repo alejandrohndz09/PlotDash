@@ -56,11 +56,11 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     ViewPager2 pagerMain;
     Dialog dialog;
-    //public static String URL_BASE = "http://192.168.1.7/plotdashserver/pages/";
+    public static String URL_BASE = "http://192.168.1.5/plotdashserver/pages/";
     //public final static String URL_BASE = "http://plotdash.free.nf/plotdashserver/pages/";
     //public final static String URL_BASE = "https://plotdash.000webhostapp.com/plotdashserver/pages/";
 
-    public final static String URL_BASE = "http://10.51.21.7/plotdashserver/pages/";
+   // public final static String URL_BASE = "http://10.51.21.7/plotdashserver/pages/";
     //public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
     BottomNavigationView bmNav;
     ArrayList<Fragment> fragArray = new ArrayList<Fragment>();
