@@ -8,7 +8,20 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.flavio.dao.DaoHistoria;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestHandle;
+import com.loopj.android.http.RequestParams;
+
+import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +39,9 @@ public class HistoriasFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     ImageButton btnAddHis;
+    ListView hist;
+    Adaptador adaptador;
+
     View view;
     public HistoriasFragment() {
         // Required empty public constructor
@@ -64,6 +80,8 @@ public class HistoriasFragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_historias, container, false);
         btnAddHis=view.findViewById(R.id.btnAddHis);
+        hist=view.findViewById(R.id.hist);
+        llenarLista();
         btnAddHis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,5 +91,37 @@ public class HistoriasFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private void llenarLista(){
+        RequestParams parametros = new RequestParams();
+        AsyncHttpClient client = new AsyncHttpClient();
+
+
+        parametros.put("opcion", "buscarTodos");
+
+        RequestHandle post = client.post(DaoHistoria.URL, parametros, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if (statusCode == 200) {
+                    System.out.println(new String(responseBody));
+                    adaptador = new Adaptador(view.getContext(), R.layout.activity_custom, DaoHistoria.obtenerList(new String(responseBody)));
+                    //adapter=new ArrayAdapter<Persona>(getBaseContext(), android.R.layout.simple_list_item_1,personas);
+                    hist.setAdapter(adaptador);
+                } else {
+                    Toast.makeText(view.getContext(), "Error al encontrar registros", Toast.LENGTH_SHORT).show();
+                }
+               // progressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
+        client.cancelAllRequests(true);
+
+
+        //progressDialog.dismiss();
     }
 }
