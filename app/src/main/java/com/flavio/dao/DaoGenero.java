@@ -1,20 +1,11 @@
 package com.flavio.dao;
 
-import com.flavio.model.Genero;
-import com.flavio.model.Genero;
-import com.flavio.model.Usuario;
-import com.flavio.plotdash.MainActivity;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.flavio.plotdash.model.Genero;
+import com.flavio.plotdash.ui.activity.MainActivity;
 
 import org.json.JSONArray;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
-import cz.msebera.android.httpclient.Header;
 
 public abstract class DaoGenero {
     public static String URL = MainActivity.URL_BASE+"DAOGeneros.php";

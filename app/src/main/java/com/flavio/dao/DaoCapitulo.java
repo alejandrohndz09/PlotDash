@@ -1,12 +1,11 @@
 package com.flavio.dao;
 
-import com.flavio.model.Capitulo;
-import com.flavio.model.Historia;
-import com.flavio.plotdash.MainActivity;
+import com.flavio.plotdash.model.Capitulo;
+import com.flavio.plotdash.model.Historia;
+import com.flavio.plotdash.ui.activity.MainActivity;
 
 import org.json.JSONArray;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

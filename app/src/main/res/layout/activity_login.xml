@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_marginHorizontal="10dp"
-    tools:context=".LoginActivity">
+    tools:context=".ui.activity.LoginActivity">
 
     <LinearLayout
         android:id="@+id/layoutPB2"

@@ -5,13 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_marginHorizontal="25dp"
-    tools:context=".HomeFragment">
+    tools:context=".ui.fragment.HomeFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         >
 
 

@@ -1,41 +1,19 @@
 package com.flavio.dao;
 
-import com.flavio.model.Genero;
-import com.flavio.model.Historia;
-import com.flavio.model.Usuario;
-import com.flavio.plotdash.MainActivity;
+import com.flavio.plotdash.model.Genero;
+import com.flavio.plotdash.model.Historia;
+import com.flavio.plotdash.model.Usuario;
+import com.flavio.plotdash.ui.activity.MainActivity;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import cz.msebera.android.httpclient.Header;
 

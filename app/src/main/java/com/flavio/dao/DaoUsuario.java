@@ -1,13 +1,11 @@
 package com.flavio.dao;
 
-import com.flavio.model.Usuario;
-import com.flavio.plotdash.MainActivity;
+import com.flavio.plotdash.model.Usuario;
+import com.flavio.plotdash.ui.activity.MainActivity;
 
 import org.json.JSONArray;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public abstract class DaoUsuario {

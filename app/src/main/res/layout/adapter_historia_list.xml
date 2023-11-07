@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:layout_marginVertical="5dp"
+    android:paddingVertical="5dp"
+    tools:context=".ui.adapter.CustomActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:layout_marginHorizontal="10dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fulanito Armando"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+        <TextView
+            android:id="@+id/apellido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mendoza"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+        <TextView
+            android:id="@+id/sexo_edad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="Masculino, 21 años"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="10dp"
+        android:gravity="center"
+        android:layout_weight="5">
+
+        <TextView
+            android:id="@+id/tel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:text="####-####"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnEdit"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/baseline_edit_24" />
+    </LinearLayout>
+
+</LinearLayout>
