@@ -1,7 +1,4 @@
-package com.flavio.plotdash.ui.activity;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+ package com.flavio.plotdash.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -19,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
 import com.flavio.dao.DaoUsuario;
 import com.flavio.plotdash.R;
 import com.flavio.plotdash.ui.util.Alert;
@@ -28,11 +28,11 @@ import com.loopj.android.http.RequestParams;
 
 import cz.msebera.android.httpclient.Header;
 
-public class LoginActivity extends AppCompatActivity {
+public class RegistroActivity extends AppCompatActivity {
 
 
     EditText usuario, clave;
-    TextView lblCrearCuenta;
+    TextView tieneCuenta;
     CardView alert;
     LinearLayout layoutPB;
     Context context;
@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_registro);
         context=this;
         layoutPB = findViewById(R.id.layoutPB2);
         usuario = findViewById(R.id.usuario);
@@ -53,13 +53,11 @@ public class LoginActivity extends AppCompatActivity {
         btnInicio = findViewById(R.id.btnInicio);
         sharedPreferences = getSharedPreferences("datos", Context.MODE_PRIVATE);
         getPreferencias();
-
-        lblCrearCuenta = findViewById(R.id.txtNotieneCuenta);
-
-        lblCrearCuenta.setOnClickListener(new View.OnClickListener() {
+        tieneCuenta =findViewById(R.id.txtyaTieneCuenta);
+        tieneCuenta.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this,RegistroActivity.class));
+            public void onClick(View v) {
+                startActivity(new Intent(RegistroActivity.this,LoginActivity.class));
             }
         });
         btnInicio.setOnClickListener(new View.OnClickListener() {

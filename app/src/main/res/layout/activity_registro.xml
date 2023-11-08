@@ -10,7 +10,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_marginHorizontal="10dp"
-    tools:context=".ui.activity.LoginActivity">
+    tools:context=".ui.activity.RegistroActivity">
 
     <LinearLayout
         android:id="@+id/layoutPB2"
@@ -49,7 +49,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Descubre historias fascinantes y comparte las tuyas. ¡Inicia sesión y adéntrate en un mundo de imaginación!"
+            android:text="Descubre historias fascinantes y comparte las tuyas. ¡Registrate para comenzar a dejar volar tu imaginación!"
             android:textSize="16sp" />
     </LinearLayout>
     <LinearLayout
@@ -82,6 +82,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
+            android:text="Correo Electronico"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="3dp"
+            android:background="@drawable/edittext"
+            android:elevation="5dp"
+            android:padding="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
             android:text="Contraseña"
             android:textColor="?attr/colorOnSecondary"
@@ -100,15 +118,26 @@
             android:padding="8dp" />
 
         <TextView
-            android:id="@+id/forgotPassword"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-           android:layout_gravity="right"
-            android:text="Olvido su Clave?"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            />
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Repetir Contraseña"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="18sp"></TextView>
+
+        <EditText
+            android:id="@+id/claver"
+            android:inputType="textPassword"
+
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="3dp"
+            android:background="@drawable/edittext"
+            android:elevation="5dp"
+            android:padding="8dp" />
+
 
 
     </LinearLayout>
@@ -124,7 +153,7 @@
 
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:text="Iniciar sesión"
+            android:text="Registrarse"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="@color/white" />
     </androidx.cardview.widget.CardView>
@@ -142,15 +171,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No tiene una cuenta?"
+            android:text="Ya tiene una cuenta?"
            />
 
         <TextView
-            android:id="@+id/txtNotieneCuenta"
+            android:id="@+id/txtyaTieneCuenta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Registrese"
+            android:text="Inicia Sesion"
             android:textStyle="bold"
           />
 
