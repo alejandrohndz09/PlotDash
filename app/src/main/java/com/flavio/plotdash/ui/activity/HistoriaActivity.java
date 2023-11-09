@@ -4,16 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.flavio.dao.DaoCapitulo;
 import com.flavio.plotdash.R;
 import com.flavio.plotdash.model.Capitulo;
 import com.flavio.plotdash.model.Historia;
 import com.flavio.plotdash.ui.adapter.AdapterVistaHistoria;
+import com.flavio.plotdash.ui.util.Alert;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -32,6 +38,8 @@ public class HistoriaActivity extends AppCompatActivity {
     List<Object> itemList ;
     Historia historia;
 
+    Button btnleer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,11 +50,31 @@ public class HistoriaActivity extends AppCompatActivity {
         rvHistoria.setLayoutManager(new LinearLayoutManager(this));
         itemList = new ArrayList<>();
 
-        Bundle parametros=this.getIntent().getExtras();
-        historia= (Historia) parametros.get("idHistoria");
-        itemList.add(historia);
-        obtenerObj("capitulos",(historia.getIdHistoria()));
-    }
+        btnleer=findViewById(R.id.btnleer);
+        Bundle parametros=this.getIntent().getExtras();historia= (Historia) parametros.get("idHistoria");
+      itemList.add(historia);
+        elementAdapter = new AdapterVistaHistoria(itemList,getBaseContext());
+        rvHistoria.setAdapter(elementAdapter);
+        elementAdapter.notifyDataSetChanged();
+        layoutPB.setVisibility(View.GONE);
+       //obtenerObj("capitulos",(historia.getIdHistoria()));
+
+        btnleer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+               // setContentView(R.layout.activity_historia2);
+                Intent intent = new Intent(getBaseContext(), HistoriaActivity2.class);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("idHistoria", historia);
+                startActivity(intent);
+            }
+        });
+
+
+
+   }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
