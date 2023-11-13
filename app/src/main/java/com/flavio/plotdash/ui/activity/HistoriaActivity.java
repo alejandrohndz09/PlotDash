@@ -4,22 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.flavio.dao.DaoCapitulo;
 import com.flavio.plotdash.R;
 import com.flavio.plotdash.model.Capitulo;
 import com.flavio.plotdash.model.Historia;
 import com.flavio.plotdash.ui.adapter.AdapterVistaHistoria;
-import com.flavio.plotdash.ui.util.Alert;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -32,7 +28,7 @@ import cz.msebera.android.httpclient.Header;
 public class HistoriaActivity extends AppCompatActivity {
 
 
-    RecyclerView rvHistoria;
+    RecyclerView rvHistoria, rvHistoria2;
     AdapterVistaHistoria elementAdapter;
     LinearLayout layoutPB;
     List<Object> itemList ;
@@ -48,6 +44,9 @@ public class HistoriaActivity extends AppCompatActivity {
         layoutPB=findViewById(R.id.layoutPB);
         rvHistoria=findViewById(R.id.rv_historia);
         rvHistoria.setLayoutManager(new LinearLayoutManager(this));
+
+        rvHistoria2=findViewById(R.id.rv_historia2);
+        rvHistoria2.setLayoutManager(new LinearLayoutManager(this));
         itemList = new ArrayList<>();
 
         btnleer=findViewById(R.id.btnleer);
@@ -55,6 +54,7 @@ public class HistoriaActivity extends AppCompatActivity {
       itemList.add(historia);
         elementAdapter = new AdapterVistaHistoria(itemList,getBaseContext());
         rvHistoria.setAdapter(elementAdapter);
+        rvHistoria2.setAdapter(elementAdapter);
         elementAdapter.notifyDataSetChanged();
         layoutPB.setVisibility(View.GONE);
        //obtenerObj("capitulos",(historia.getIdHistoria()));
@@ -63,8 +63,8 @@ public class HistoriaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-               // setContentView(R.layout.activity_historia2);
-                Intent intent = new Intent(getBaseContext(), HistoriaActivity2.class);
+
+                Intent intent = new Intent(getBaseContext(), LeerHistoriaActivity.class);
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("idHistoria", historia);
@@ -108,6 +108,7 @@ public class HistoriaActivity extends AppCompatActivity {
                     }
                     elementAdapter = new AdapterVistaHistoria(itemList,getBaseContext());
                     rvHistoria.setAdapter(elementAdapter);
+                    rvHistoria2.setAdapter(elementAdapter);
                     elementAdapter.notifyDataSetChanged();
                     layoutPB.setVisibility(View.GONE);
                 }

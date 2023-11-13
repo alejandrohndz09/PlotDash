@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingHorizontal="30dp">
-
+    android:paddingHorizontal="30dp"
+    android:paddingBottom="30dp">
 
     <TextView
         android:id="@+id/tituloCap"
@@ -16,12 +16,16 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+
     <TextView
         android:id="@+id/contenido"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Title"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textAlignment="textStart"
+        android:layout_width="match_parent"
+        android:justificationMode="inter_word"      />
+
 
 
 </LinearLayout>

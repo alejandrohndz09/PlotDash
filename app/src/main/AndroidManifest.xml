@@ -35,6 +35,9 @@
             android:name=".ui.activity.HistoriaActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.activity.LeerHistoriaActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.MainActivity"
             android:exported="false"></activity>
     </application>

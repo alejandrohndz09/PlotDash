@@ -1,5 +1,6 @@
 package com.flavio.dao;
 
+import com.flavio.plotdash.model.Comentario;
 import com.flavio.plotdash.model.Genero;
 import com.flavio.plotdash.model.Historia;
 import com.flavio.plotdash.model.Usuario;
@@ -11,6 +12,7 @@ import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -95,7 +97,7 @@ public abstract class DaoHistoria {
             JSONArray jsonArray = new JSONArray(response);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             for (int i = 0; i < jsonArray.length(); i++) {
-                Historia p = new Historia(
+                Historia historia = new Historia(
                         jsonArray.getJSONObject(i).getInt("idHistoria"),
                         jsonArray.getJSONObject(i).getString("titulo"),
                         jsonArray.getJSONObject(i).getString("descripcion"),
@@ -107,7 +109,42 @@ public abstract class DaoHistoria {
                         jsonArray.getJSONObject(i).getDouble("calificacion")
 
                 );
-                objetos.add(p);
+                if (jsonArray.getJSONObject(i).has("comentarios") && !jsonArray.getJSONObject(i).isNull("comentarios")) {
+                    JSONArray comentariosArray = jsonArray.getJSONObject(i).getJSONArray("comentarios");
+                    ArrayList<Comentario> comentarios = new ArrayList<>();
+                    for (int j = 0; j < comentariosArray.length(); j++) {
+                        JSONArray usuarioArray = jsonArray.getJSONObject(j).getJSONArray("usuario");
+                        Usuario usuario = new Usuario();
+                        String pattern = "yyyy-MM-dd";
+                        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+                        for (int k = 0; k < jsonArray.length(); k++) {
+                            usuario = new Usuario(
+                                    usuarioArray.getJSONObject(k).getInt("idUsuario"),
+                                    usuarioArray.getJSONObject(k).getString("foto"),
+                                    usuarioArray.getJSONObject(k).getString("nombre"),
+                                    usuarioArray.getJSONObject(k).getString("apellidos"),
+                                    usuarioArray.getJSONObject(k).getString("sexo"),
+                                    dateFormat.parse(usuarioArray.getJSONObject(k).getString("fecha_nacimiento")),
+                                    usuarioArray.getJSONObject(k).getString("correo"),
+                                    usuarioArray.getJSONObject(k).getString("usuario"),
+                                    usuarioArray.getJSONObject(k).getString("clave")
+
+                            );
+                        }
+                        Comentario comentario = new Comentario(
+                                comentariosArray.getJSONObject(j).getInt("idComentario"),
+                                usuario,
+                                historia,
+                                LocalDateTime.parse(comentariosArray.getJSONObject(i).getString("fecha"), formatter),
+                                comentariosArray.getJSONObject(j).getString("comentario")
+                        );
+                        comentarios.add(comentario);
+                    }
+                    historia.setComentarios(comentarios);
+                }
+
+
+                objetos.add(historia);
 
             }
         } catch (Exception e) {

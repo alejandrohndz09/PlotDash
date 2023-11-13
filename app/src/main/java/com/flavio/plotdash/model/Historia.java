@@ -1,7 +1,10 @@
 package com.flavio.plotdash.model;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Historia implements Serializable {
@@ -14,6 +17,15 @@ public class Historia implements Serializable {
     private Usuario idUsuario;
     private int vistas;
     private Double calificacion;
+    private ArrayList <Comentario>  comentarios;
+
+    public ArrayList<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(ArrayList<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
 
     public Historia() {
     }

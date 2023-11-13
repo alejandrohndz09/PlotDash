@@ -10,13 +10,13 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/pagerMain"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bmNav"
-        android:layout_marginBottom="60dp"
-    /> </LinearLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pagerMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bmNav"
+            android:layout_marginBottom="60dp"
+            /> </LinearLayout>
 
     <androidx.cardview.widget.CardView
 
@@ -26,16 +26,16 @@
         android:layout_marginVertical="10dp"
         android:layout_alignParentBottom="true"
 
-    app:cardCornerRadius="25dp">
+        app:cardCornerRadius="25dp">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bmNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:backgroundTint="?attr/cardBackgroundColor"
-        app:itemTextColor="@color/color_item_nav"
-        app:itemIconTint="@color/color_item_nav"
-        app:menu="@menu/botton_menu" />
-</androidx.cardview.widget.CardView>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bmNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:backgroundTint="?attr/cardBackgroundColor"
+            app:itemTextColor="@color/color_item_nav"
+            app:itemIconTint="@color/color_item_nav"
+            app:menu="@menu/botton_menu" />
+    </androidx.cardview.widget.CardView>
 
-    </RelativeLayout>
+</RelativeLayout>

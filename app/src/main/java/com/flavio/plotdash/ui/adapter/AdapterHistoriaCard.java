@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.flavio.plotdash.model.Historia;
 import com.flavio.plotdash.ui.activity.HistoriaActivity;
 import com.flavio.plotdash.R;
-import com.flavio.plotdash.ui.activity.HistoriaActivity2;
 
 import java.util.List;
 
