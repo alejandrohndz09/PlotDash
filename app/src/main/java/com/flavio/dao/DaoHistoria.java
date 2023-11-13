@@ -1,6 +1,7 @@
 package com.flavio.dao;
 
 import com.flavio.plotdash.model.Capitulo;
+import com.flavio.plotdash.model.Comentario;
 import com.flavio.plotdash.model.Genero;
 import com.flavio.plotdash.model.Historia;
 import com.flavio.plotdash.model.Usuario;
@@ -126,7 +127,7 @@ public abstract class DaoHistoria {
                     historia.setCapitulos(capitulos);
                 }
 
-               /* if (jsonArray.getJSONObject(i).has("comentarios") && !jsonArray.getJSONObject(i).isNull("comentarios")) {
+                if (jsonArray.getJSONObject(i).has("comentarios") && !jsonArray.getJSONObject(i).isNull("comentarios")) {
                     JSONArray comentariosArray = jsonArray.getJSONObject(i).getJSONArray("comentarios");
                     ArrayList<Comentario> comentarios = new ArrayList<>();
                     for (int j = 0; j < comentariosArray.length(); j++) {
@@ -158,7 +159,7 @@ public abstract class DaoHistoria {
                         comentarios.add(comentario);
                     }
                     historia.setComentarios(comentarios);
-                }*/
+                }
                 objetos.add(historia);
             }
         } catch (Exception e) {
