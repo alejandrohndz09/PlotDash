@@ -23,6 +23,7 @@ public class Historia implements Serializable {
     private int estado;
     private Double calificacion;
     private ArrayList<Capitulo> capitulos;
+    private ArrayList<Comentario> comentarios;
 
     public Historia() {
     }
@@ -130,6 +131,14 @@ public class Historia implements Serializable {
 
     public void setCapitulos(ArrayList<Capitulo> capitulos) {
         this.capitulos = capitulos;
+    }
+
+    public ArrayList<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(ArrayList<Comentario> comentarios) {
+        this.comentarios = comentarios;
     }
 
     public  String getFechaCreacionFormateada() {
