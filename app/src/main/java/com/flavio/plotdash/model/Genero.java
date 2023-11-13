@@ -6,6 +6,11 @@ public class Genero  implements Serializable {
     private int idGenero;
     private String genero;
 
+    @Override
+    public String toString() {
+        return genero;
+    }
+
     public Genero(int idGenero) {
         this.idGenero = idGenero;
     }

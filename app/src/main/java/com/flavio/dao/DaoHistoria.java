@@ -1,6 +1,6 @@
 package com.flavio.dao;
 
-import com.flavio.plotdash.model.Comentario;
+import com.flavio.plotdash.model.Capitulo;
 import com.flavio.plotdash.model.Genero;
 import com.flavio.plotdash.model.Historia;
 import com.flavio.plotdash.model.Usuario;
@@ -106,10 +106,27 @@ public abstract class DaoHistoria {
                         LocalDateTime.parse(jsonArray.getJSONObject(i).getString("fecha_creacion"), formatter),
                         new Usuario(jsonArray.getJSONObject(i).getInt("idUsuario")),
                         jsonArray.getJSONObject(i).getInt("vistas"),
+                        jsonArray.getJSONObject(i).getInt("estado"),
                         jsonArray.getJSONObject(i).getDouble("calificacion")
-
                 );
-                if (jsonArray.getJSONObject(i).has("comentarios") && !jsonArray.getJSONObject(i).isNull("comentarios")) {
+                if (jsonArray.getJSONObject(i).has("capitulos") && !jsonArray.getJSONObject(i).isNull("capitulos")) {
+                    JSONArray capitulosArray = jsonArray.getJSONObject(i).getJSONArray("capitulos");
+                    ArrayList<Capitulo> capitulos = new ArrayList<>();
+                    for (int j = 0; j < capitulosArray.length(); j++) {
+                        Capitulo capitulo = new Capitulo(
+                                capitulosArray.getJSONObject(j).getInt("idCapitulo"),
+                                historia,
+                                LocalDateTime.parse(capitulosArray.getJSONObject(i).getString("fecha_creado"), formatter),
+                                capitulosArray.getJSONObject(j).getString("titulo"),
+                                capitulosArray.getJSONObject(j).getString("contenido"),
+                                capitulosArray.getJSONObject(j).getInt("num")
+                        );
+                        capitulos.add(capitulo);
+                    }
+                    historia.setCapitulos(capitulos);
+                }
+
+               /* if (jsonArray.getJSONObject(i).has("comentarios") && !jsonArray.getJSONObject(i).isNull("comentarios")) {
                     JSONArray comentariosArray = jsonArray.getJSONObject(i).getJSONArray("comentarios");
                     ArrayList<Comentario> comentarios = new ArrayList<>();
                     for (int j = 0; j < comentariosArray.length(); j++) {
@@ -141,15 +158,11 @@ public abstract class DaoHistoria {
                         comentarios.add(comentario);
                     }
                     historia.setComentarios(comentarios);
-                }
-
-
+                }*/
                 objetos.add(historia);
-
             }
         } catch (Exception e) {
             e.printStackTrace();
-
         }
         return objetos;
     }

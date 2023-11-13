@@ -7,10 +7,24 @@
     android:orientation="vertical"
     android:scrollbars="vertical"
     tools:context=".ui.activity.FormHistoriaActivity">
+    <LinearLayout
+        android:id="@+id/layoutPB2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible" />
+    </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,17 +93,18 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Título"
-                                android:textSize="25sp"
-                                android:textStyle="bold"/>
+                                android:textSize="18sp"
+                                />
 
 
                             <EditText
-                                android:id="@+id/titulo"
+                                android:id="@+id/etTitulo"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginVertical="3dp"
                                 android:minHeight="45dp"
+                                android:hint="Título de historia"
                                 android:background="@drawable/edittext"
                                 android:elevation="5dp"
                                 android:padding="8dp"
@@ -121,12 +136,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Descripción"
-                        android:textStyle="bold"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="18sp"
                         />
                     <EditText
-                        android:id="@+id/descripcion"
+                        android:id="@+id/etDescripcion"
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
                         android:layout_marginHorizontal="10dp"
@@ -134,6 +148,7 @@
                         android:background="@drawable/edittext"
                         android:elevation="5dp"
                         android:ems="10"
+                        android:hint="Describa una sinopsis o resumen de la historia..."
                         android:gravity="left|top"
                         android:inputType="textMultiLine"
                         android:padding="8dp"
@@ -154,12 +169,12 @@
                         android:layout_height="wrap_content"
                         android:text="Género"
                         android:textColor="?attr/colorOnSecondary"
-                        android:textStyle="bold"
+
                         android:textSize="18sp"
                         />
 
                     <Spinner
-                        android:id="@+id/genero"
+                        android:id="@+id/spGenero"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginHorizontal="10dp"
@@ -192,21 +207,21 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="bottom">
-        <!--linea divisoria-->
-        <LinearLayout
+
+        <View
+            android:id="@+id/divider2"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@drawable/edittext"
-            android:elevation="3dp"
-            android:orientation="vertical" />
-        <!--Panel agregar Capitulo-->
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnAddCap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingVertical="10dp"

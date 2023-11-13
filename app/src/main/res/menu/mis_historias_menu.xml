@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <group>
+        <item
+            android:id="@+id/subMenuOP12"
+            android:icon="@drawable/baseline_delete_outline_24"
+            android:title="Mover a papelera">
+        </item>
+        <item
+            android:id="@+id/subMenuOP22"
+            android:title="Ver detalles"
+            android:icon="@drawable/baseline_remove_red_eye_24"
+            android:iconTint="?attr/colorOnPrimary"></item>
+    </group>
+
+</menu>

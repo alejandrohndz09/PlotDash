@@ -1,6 +1,7 @@
 package com.flavio.plotdash.ui.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
@@ -13,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,11 +38,11 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     ViewPager2 pagerMain;
     Dialog dialog;
-   // public static String URL_BASE = "http://192.168.1.5/plotdashserver/pages/";
+    public static String URL_BASE = "http://192.168.1.5/plotdashserver/pages/";
     //public final static String URL_BASE = "http://plotdash.free.nf/plotdashserver/pages/";
     //public final static String URL_BASE = "https://plotdash.000webhostapp.com/plotdashserver/pages/";
 
-    public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
+//    public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
     //public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
     BottomNavigationView bmNav;
     ArrayList<Fragment> fragArray = new ArrayList<Fragment>();
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         AdapterVistaPrincipal adapterViewPage = new AdapterVistaPrincipal(this, fragArray);
         pagerMain.setAdapter(adapterViewPage);
 
-      /*  pagerMain.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        pagerMain.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 switch (position) {
@@ -76,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 super.onPageSelected(position);
             }
-        });*/
-        bmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        });
+        /*bmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
@@ -93,14 +95,20 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
-        });
+        });*/
     }
 
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View view, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
+        if (view.getId() == R.id.hist) {
+            this.getMenuInflater().inflate(R.menu.mis_historias_menu, menu);
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options_menu, menu);
         MenuItem op = menu.findItem(R.id.profile);
-
         //String url = "https://img.a.transfermarkt.technology/portrait/big/8198-1685035469.png?lm=1";
         String url = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
         if (!usuario.getFoto().isEmpty()
