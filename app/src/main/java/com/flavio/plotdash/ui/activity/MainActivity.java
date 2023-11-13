@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageSelected(position);
             }
         });
-        bmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        /*bmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
-        });
+        });*/
     }
 
     @Override

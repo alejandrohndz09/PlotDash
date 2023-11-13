@@ -1,7 +1,14 @@
 package com.flavio.plotdash.model;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class Historia implements Serializable {
@@ -13,12 +20,14 @@ public class Historia implements Serializable {
     private LocalDateTime fecha_creacion;
     private Usuario idUsuario;
     private int vistas;
+    private int estado;
     private Double calificacion;
+    private ArrayList<Capitulo> capitulos;
 
     public Historia() {
     }
 
-    public Historia(int idHistoria, String titulo, String descripcion, Genero idGenero, String portada, LocalDateTime fecha_creacion, Usuario idUsuario, int vistas, Double calificacion) {
+    public Historia(int idHistoria, String titulo, String descripcion, Genero idGenero, String portada, LocalDateTime fecha_creacion, Usuario idUsuario, int vistas, int estado, Double calificacion) {
         this.idHistoria = idHistoria;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -27,6 +36,7 @@ public class Historia implements Serializable {
         this.fecha_creacion = fecha_creacion;
         this.idUsuario = idUsuario;
         this.vistas = vistas;
+        this.estado = estado;
         this.calificacion = calificacion;
     }
 
@@ -98,11 +108,52 @@ public class Historia implements Serializable {
         this.vistas = vistas;
     }
 
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int vistas) {
+        this.estado = estado;
+    }
+
     public Double getCalificacion() {
         return calificacion;
     }
 
     public void setCalificacion(Double calificacion) {
         this.calificacion = calificacion;
+    }
+
+    public ArrayList<Capitulo> getCapitulos() {
+        return capitulos;
+    }
+
+    public void setCapitulos(ArrayList<Capitulo> capitulos) {
+        this.capitulos = capitulos;
+    }
+
+    public  String getFechaCreacionFormateada() {
+        LocalDateTime dateTimeToCompare=this.fecha_creacion;
+
+        ZoneId timeZone = ZoneId.of("America/El_Salvador");
+        ZonedDateTime now = ZonedDateTime.now(timeZone);
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(dateTimeToCompare, timeZone);
+        Duration duration = Duration.between(zonedDateTime, now);
+
+        if (duration.toDays() < 1) {
+            if (duration.toMinutes() < 1) {
+                return "unos momentos";
+            } else if (duration.toHours() < 1) {
+                long minutes = duration.toMinutes();
+                return minutes + "min";
+            }else {
+                long hours = duration.toHours();
+                return hours + "h";
+            }
+        } else if (zonedDateTime.toLocalDate().getYear() < now.toLocalDate().getYear()) {
+            return zonedDateTime.format(DateTimeFormatter.ofPattern("d 'de' MMM", new Locale("es", "ES")));
+        } else {
+            return zonedDateTime.format(DateTimeFormatter.ofPattern("d 'de' MMM", new Locale("es", "ES")));
+        }
     }
 }
