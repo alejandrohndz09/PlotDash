@@ -269,7 +269,7 @@ public class RegistroActivity extends AppCompatActivity {
 
                         // Agregar datos del usuario a la intención
                         intent.putExtra("usuario", usuario);
-                        intent.putExtra("email", email);
+
 
                         // Iniciar la actividad de inicio de sesión
                         startActivity(intent);

@@ -27,11 +27,11 @@ public abstract class DaoUsuario {
             for (int i = 0; i < jsonArray.length(); i++) {
                 Usuario p = new Usuario(
                         jsonArray.getJSONObject(i).getInt("idUsuario"),
-                        jsonArray.getJSONObject(i).getString("foto"),
-                        jsonArray.getJSONObject(i).getString("nombre"),
-                        jsonArray.getJSONObject(i).getString("apellidos"),
-                        jsonArray.getJSONObject(i).getString("sexo"),
-                        dateFormat.parse(jsonArray.getJSONObject(i).getString("fecha_nacimiento")),
+                       "",
+                        "",
+                        "",
+                        "",
+                        null,
                         jsonArray.getJSONObject(i).getString("correo"),
                         jsonArray.getJSONObject(i).getString("usuario"),
                         jsonArray.getJSONObject(i).getString("clave")
