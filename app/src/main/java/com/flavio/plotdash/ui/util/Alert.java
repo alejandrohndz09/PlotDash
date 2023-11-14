@@ -26,6 +26,9 @@ public  class Alert  {
             iconAlert.setImageResource(R.drawable.baseline_error_outline_24);
         } else if (tipo.equals("exito")) {
             iconAlert.setImageResource(R.drawable.baseline_check_circle_outline_24);
+        }
+        else if (tipo.equals("medio")) {
+            iconAlert.setImageResource(R.drawable.baseline_e_24);
         }else if (tipo.equals("info")) {
             iconAlert.setImageResource(R.drawable.outline_info_24);
         }else if (tipo.equals("warning")) {
