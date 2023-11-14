@@ -154,7 +154,7 @@ public abstract class DaoHistoria {
                                 comentariosArray.getJSONObject(j).getInt("idComentario"),
                                 usuario,
                                 historia,
-                                LocalDateTime.parse(comentariosArray.getJSONObject(i).getString("fecha"), formatter),
+                                LocalDateTime.parse(comentariosArray.getJSONObject(j).getString("fecha"), formatter),
                                 comentariosArray.getJSONObject(j).getString("comentario")
                         );
                         comentarios.add(comentario);

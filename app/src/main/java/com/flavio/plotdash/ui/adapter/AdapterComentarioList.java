@@ -66,6 +66,7 @@ public class AdapterComentarioList extends ArrayAdapter<Comentario> {
 
             fecha.setText("Creado el "+((Comentario) comentario).getFechaCreacionFormateada());
         }
+//        fecha.setText( comentario.getFecha().toString());
         nombre.setText(comentario.getIdUsuario().getNombre()+' '+comentario.getIdUsuario().getApellido());
 
         txtComentario.setText(comentario.getComentario());
