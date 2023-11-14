@@ -131,11 +131,11 @@ public abstract class DaoHistoria {
                     JSONArray comentariosArray = jsonArray.getJSONObject(i).getJSONArray("comentarios");
                     ArrayList<Comentario> comentarios = new ArrayList<>();
                     for (int j = 0; j < comentariosArray.length(); j++) {
-                        JSONArray usuarioArray = jsonArray.getJSONObject(j).getJSONArray("usuario");
+                        JSONArray usuarioArray = comentariosArray.getJSONObject(j).getJSONArray("usuario");
                         Usuario usuario = new Usuario();
                         String pattern = "yyyy-MM-dd";
                         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-                        for (int k = 0; k < jsonArray.length(); k++) {
+                        for (int k = 0; k < usuarioArray.length(); k++) {
                             usuario = new Usuario(
                                     usuarioArray.getJSONObject(k).getInt("idUsuario"),
                                     usuarioArray.getJSONObject(k).getString("foto"),

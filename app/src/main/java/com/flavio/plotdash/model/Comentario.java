@@ -1,5 +1,6 @@
 package com.flavio.plotdash.model;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -7,7 +8,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public class Comentario {
+public class Comentario  implements Serializable {
 
     private int idComentario;
     private Usuario idUsuario;
