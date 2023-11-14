@@ -55,6 +55,16 @@ public class LoginActivity extends AppCompatActivity {
         getPreferencias();
 
         lblCrearCuenta = findViewById(R.id.txtNotieneCuenta);
+        // Obtener el extra del intent
+        Intent intent = getIntent();
+        if (intent != null) {
+            String usuarioRegistrado = intent.getStringExtra("usuario");
+
+            // Hacer algo con el nombre de usuario, por ejemplo, establecerlo en el campo de nombre de usuario
+            if (usuarioRegistrado != null) {
+                usuario.setText(usuarioRegistrado);
+            }
+        }
 
         lblCrearCuenta.setOnClickListener(new View.OnClickListener() {
             @Override

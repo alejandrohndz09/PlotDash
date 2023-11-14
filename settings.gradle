@@ -2,6 +2,12 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
+        mavenCentral() {
+            content {
+                includeModule("com.flavio.plotdash", "android-image-cropper")
+            }
+        }
         gradlePluginPortal()
     }
 }
@@ -10,6 +16,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
+        mavenCentral() {
+            content {
+                includeModule("com.flavio.plotdash", "android-image-cropper")
+            }
+        }
     }
 }
 rootProject.name = "PlotDash"
