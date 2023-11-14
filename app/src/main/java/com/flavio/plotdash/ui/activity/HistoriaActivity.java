@@ -8,13 +8,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.flavio.dao.DaoCapitulo;
+import com.flavio.dao.DaoGenero;
 import com.flavio.plotdash.R;
 import com.flavio.plotdash.model.Capitulo;
+import com.flavio.plotdash.model.Comentario;
+import com.flavio.plotdash.model.Genero;
 import com.flavio.plotdash.model.Historia;
+import com.flavio.plotdash.ui.adapter.AdapterComentarioList;
 import com.flavio.plotdash.ui.adapter.AdapterVistaHistoria;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -30,6 +36,7 @@ public class HistoriaActivity extends AppCompatActivity {
 
     RecyclerView rvHistoria, rvHistoria2;
     AdapterVistaHistoria elementAdapter;
+    ListView listaComentario;
     LinearLayout layoutPB;
     List<Object> itemList ;
     Historia historia;
@@ -44,17 +51,18 @@ public class HistoriaActivity extends AppCompatActivity {
         layoutPB=findViewById(R.id.layoutPB);
         rvHistoria=findViewById(R.id.rv_historia);
         rvHistoria.setLayoutManager(new LinearLayoutManager(this));
-
-        rvHistoria2=findViewById(R.id.rv_historia2);
-        rvHistoria2.setLayoutManager(new LinearLayoutManager(this));
+        listaComentario=findViewById(R.id.listaComentario);
+//        rvHistoria2=findViewById(R.id.rv_historia2);
+//        rvHistoria2.setLayoutManager(new LinearLayoutManager(this));
         itemList = new ArrayList<>();
 
         btnleer=findViewById(R.id.btnleer);
-        Bundle parametros=this.getIntent().getExtras();historia= (Historia) parametros.get("idHistoria");
+        Bundle parametros=this.getIntent().getExtras();
+        historia= (Historia) parametros.get("idHistoria");
       itemList.add(historia);
         elementAdapter = new AdapterVistaHistoria(itemList,getBaseContext());
         rvHistoria.setAdapter(elementAdapter);
-        rvHistoria2.setAdapter(elementAdapter);
+//        rvHistoria2.setAdapter(elementAdapter);
         elementAdapter.notifyDataSetChanged();
         layoutPB.setVisibility(View.GONE);
        //obtenerObj("capitulos",(historia.getIdHistoria()));
@@ -71,10 +79,22 @@ public class HistoriaActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        llenarComentarios();
 
 
 
    }
+
+    private void llenarComentarios() {
+        if (historia.getComentarios() != null){
+            AdapterComentarioList adapter = new AdapterComentarioList(getBaseContext(), R.layout.adapter_comentario_list, historia.getComentarios());
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            listaComentario.setAdapter(adapter);
+        }
+
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -108,7 +128,7 @@ public class HistoriaActivity extends AppCompatActivity {
                     }
                     elementAdapter = new AdapterVistaHistoria(itemList,getBaseContext());
                     rvHistoria.setAdapter(elementAdapter);
-                    rvHistoria2.setAdapter(elementAdapter);
+//                    rvHistoria2.setAdapter(elementAdapter);
                     elementAdapter.notifyDataSetChanged();
                     layoutPB.setVisibility(View.GONE);
                 }

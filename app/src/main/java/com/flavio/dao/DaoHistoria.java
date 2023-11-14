@@ -147,6 +147,7 @@ public abstract class DaoHistoria {
                                     usuarioArray.getJSONObject(k).getString("usuario"),
                                     usuarioArray.getJSONObject(k).getString("clave")
 
+
                             );
                         }
                         Comentario comentario = new Comentario(
