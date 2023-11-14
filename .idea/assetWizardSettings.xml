@@ -373,7 +373,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/save_as/baseline_save_as_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialiconsround/remove/round_remove_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -385,7 +385,7 @@
                           <map>
                             <entry key="autoMirrored" value="true" />
                             <entry key="color" value="b6b6b6" />
-                            <entry key="outputName" value="baseline_save_as_24" />
+                            <entry key="outputName" value="round_remove_24" />
                             <entry key="sourceFile" value="C:\Users\molin\Downloads\add-picture-svgrepo-com.svg" />
                           </map>
                         </option>

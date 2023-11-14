@@ -17,6 +17,9 @@
         android:theme="@style/Theme.PlotDash"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.HistoriaActivity1"
+            android:exported="false" />
+        <activity
             android:name=".ui.adapter.CustomActivity"
             android:exported="false" />
         <activity
@@ -39,7 +42,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

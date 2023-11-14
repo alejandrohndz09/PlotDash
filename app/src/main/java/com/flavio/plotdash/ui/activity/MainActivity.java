@@ -79,23 +79,20 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageSelected(position);
             }
         });
-        /*bmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        bmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.opHome:
-                        pagerMain.setCurrentItem(0);
-                        break;
-                    case R.id.opLibrary:
-                        pagerMain.setCurrentItem(1);
-                        break;
-                    case R.id.opWrite:
-                        pagerMain.setCurrentItem(2);
-                        break;
-                }
+
+                if (item.getItemId()==R.id.opHome)
+                    pagerMain.setCurrentItem(0);
+                else if (item.getItemId() == R.id.opLibrary)
+                    pagerMain.setCurrentItem(1);
+                else if (item.getItemId() == R.id.opWrite)
+                    pagerMain.setCurrentItem(2);
+
                 return true;
             }
-        });*/
+        });
     }
 
     @Override

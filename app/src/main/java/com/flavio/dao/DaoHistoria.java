@@ -117,7 +117,7 @@ public abstract class DaoHistoria {
                         Capitulo capitulo = new Capitulo(
                                 capitulosArray.getJSONObject(j).getInt("idCapitulo"),
                                 historia,
-                                LocalDateTime.parse(capitulosArray.getJSONObject(i).getString("fecha_creado"), formatter),
+                                LocalDateTime.parse(capitulosArray.getJSONObject(j).getString("fecha_creado"), formatter),
                                 capitulosArray.getJSONObject(j).getString("titulo"),
                                 capitulosArray.getJSONObject(j).getString("contenido"),
                                 capitulosArray.getJSONObject(j).getInt("num")
