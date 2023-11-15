@@ -43,7 +43,13 @@
                 android:orientation="vertical"
                 android:paddingLeft="15dp"
                 android:paddingRight="30dp">
-
+                <ImageView
+                    android:id="@+id/portada"
+                    android:layout_width="100dp"
+                    android:layout_height="125dp"
+                    android:layout_weight="2"
+                    android:scaleType="centerInside"
+                    tools:srcCompat="@tools:sample/avatars" />
 
                 <Button
                     android:id="@+id/btnInicio"
@@ -90,6 +96,27 @@
                         android:hint="Apellidos"
                         android:padding="8dp" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal">
+
+                    <RadioButton
+                        android:id="@+id/radioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Maculino" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Femenino" />
+
+                </RadioGroup>
+
 
             </LinearLayout>
 
