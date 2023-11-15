@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         AdapterVistaPrincipal adapterViewPage = new AdapterVistaPrincipal(this, fragArray);
         pagerMain.setAdapter(adapterViewPage);
 
-      /*  pagerMain.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        pagerMain.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 switch (position) {
@@ -77,10 +77,13 @@ public class MainActivity extends AppCompatActivity {
                     case 2:
                         bmNav.setSelectedItemId(R.id.opWrite);
                         break;
+                    case 3:
+                        bmNav.setSelectedItemId(R.id.opAjustes);
+                        break;
                 }
                 super.onPageSelected(position);
             }
-        });*/
+        });
         bmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

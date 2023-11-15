@@ -59,7 +59,7 @@ public class AdapterHistoriaCard extends RecyclerView.Adapter<AdapterHistoriaCar
         holder.calificacion.setText(String.format("%.1f", historiaList.get(position).getCalificacion()));
         holder.historiaItem.setOnClickListener(e -> {
             Historia historia = historiaList.get(position);
-            Intent intent = new Intent(context, HistoriaActivity1.class);
+            Intent intent = new Intent(context, HistoriaActivity.class);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
              intent.putExtra("idHistoria", historia);
