@@ -8,7 +8,6 @@
     android:gravity="center"
     android:paddingHorizontal="15dp"
     android:paddingVertical="15dp">
-
     <androidx.cardview.widget.CardView
         android:layout_width="75dp"
         android:layout_height="44dp"
