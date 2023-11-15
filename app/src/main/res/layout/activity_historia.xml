@@ -7,7 +7,6 @@
     tools:context=".ui.activity.HistoriaActivity"
     android:orientation="vertical"
     android:scrollbars="vertical">
-
     <LinearLayout
         android:id="@+id/layoutPB"
         android:visibility="visible"
