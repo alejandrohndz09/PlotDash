@@ -51,13 +51,13 @@ public class HistoriaActivity extends AppCompatActivity {
 
         btnleer=findViewById(R.id.btnleer);
         Bundle parametros=this.getIntent().getExtras();historia= (Historia) parametros.get("idHistoria");
-      itemList.add(historia);
+        itemList.add(historia);
         elementAdapter = new AdapterVistaHistoria(itemList,getBaseContext());
         rvHistoria.setAdapter(elementAdapter);
         rvHistoria2.setAdapter(elementAdapter);
         elementAdapter.notifyDataSetChanged();
         layoutPB.setVisibility(View.GONE);
-       //obtenerObj("capitulos",(historia.getIdHistoria()));
+        //obtenerObj("capitulos",(historia.getIdHistoria()));
 
         btnleer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +74,7 @@ public class HistoriaActivity extends AppCompatActivity {
 
 
 
-   }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

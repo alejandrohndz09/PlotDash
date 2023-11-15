@@ -26,6 +26,7 @@ import com.flavio.plotdash.ui.fragment.BibliotecaFragment;
 import com.flavio.plotdash.ui.fragment.HistoriasFragment;
 import com.flavio.plotdash.ui.fragment.HomeFragment;
 import com.flavio.plotdash.ui.adapter.AdapterVistaPrincipal;
+import com.flavio.plotdash.ui.fragment.SettingFragment;
 import com.flavio.plotdash.ui.util.BitmapManage;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
