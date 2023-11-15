@@ -41,10 +41,8 @@ public class SettingFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     View vista;
-    RecyclerView rv_parent;
-    ArrayList<Map<String, Object>> comboHistoriaList;
-    AdapterHistoriaCombo comboHistoriaAdapter;
-    ArrayList<Historia> listaH;
+
+
 
     public SettingFragment() {
         // Required empty public constructor
@@ -80,14 +78,7 @@ public class SettingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        vista = inflater.inflate(R.layout.fragment_home, container, false);
-        rv_parent = vista.findViewById(R.id.rv_parent);
-        comboHistoriaList = new ArrayList<>();
-        rv_parent.setLayoutManager(new LinearLayoutManager(vista.getContext()));
-
-        llenarCombo("masReciente", "Lo más nuevo");
-        llenarCombo("masVistas", "Lo más popular");
-        llenarCombo("buscarTodos", "Otros");
+        vista = inflater.inflate(R.layout.fragment_setting, container, false);
         return vista;
     }
 
@@ -106,10 +97,6 @@ public class SettingFragment extends Fragment {
                     combo.put("titulo", titulo);
                     combo.put("historiaList", DaoHistoria.obtenerList(new String(responseBody)));
                     System.out.println(new String(responseBody));
-                    comboHistoriaList.add(combo);
-                    comboHistoriaAdapter = new AdapterHistoriaCombo(comboHistoriaList, vista.getContext());
-                    rv_parent.setAdapter(comboHistoriaAdapter);
-                    comboHistoriaAdapter.notifyDataSetChanged();
                 }
             }
 
