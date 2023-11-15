@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:scrollbars="vertical"
+
+    tools:context=".ui.activity.FormCapituloActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
+            android:orientation="vertical">
+            <TextView
+                android:paddingLeft="6dp"
+                android:textColor="?attr/colorOnSecondary"
+                android:maxLines="3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Título"
+                android:textSize="18sp"
+                />
+
+
+            <EditText
+                android:id="@+id/etTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginVertical="3dp"
+                android:minHeight="45dp"
+                android:hint="Título del capítulo"
+                android:background="@drawable/edittext"
+                android:elevation="5dp"
+                android:padding="8dp"
+                android:importantForAutofill="no" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:maxLines="6"
+                android:paddingLeft="6dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contenido"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="18sp"
+                />
+            <EditText
+                android:id="@+id/etContenido"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="3dp"
+                android:background="@drawable/edittext"
+                android:elevation="5dp"
+                android:ems="10"
+                android:hint="Escriba acá el contenido de este capítulo..."
+                android:gravity="left|top"
+                android:inputType="textMultiLine"
+                android:padding="8dp"
+                android:scrollbars="vertical"
+                android:importantForAutofill="no" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

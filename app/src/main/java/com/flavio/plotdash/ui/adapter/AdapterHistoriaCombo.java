@@ -2,6 +2,7 @@ package com.flavio.plotdash.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ public class AdapterHistoriaCombo extends RecyclerView.Adapter<AdapterHistoriaCo
             holder.rv_child.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
         }
+
 
         AdapterHistoriaCard historiaAdapter = new AdapterHistoriaCard((List<Historia>) comboHistoriaList.get(position).get("historiaList"), context);
         holder.rv_child.setAdapter(historiaAdapter);

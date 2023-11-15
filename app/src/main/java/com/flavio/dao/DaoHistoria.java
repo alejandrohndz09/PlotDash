@@ -35,7 +35,9 @@ public abstract class DaoHistoria {
         parametros.put("descripcion", obj.getDescripcion());
         parametros.put("idGenero", obj.getIdGenero().getIdGenero());
         parametros.put("portada", obj.getPortada());
-        parametros.put("fecha_creacion", obj.getFecha_creacion());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String fechaCreacionString = obj.getFecha_creacion().format(formatter);
+        parametros.put("fecha_creacion", fechaCreacionString);
         parametros.put("idUsuario", obj.getIdUsuario().getIdUsuario());
         if (obj.getIdHistoria() > 0) {
             parametros.put("idHistoria", obj.getIdHistoria());
