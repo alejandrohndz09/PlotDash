@@ -119,7 +119,6 @@ public class HistoriaActivity extends AppCompatActivity {
             public void onStart() {
                 layoutPB.setVisibility(View.VISIBLE);
             }
-
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 if (statusCode == 200) {
                     ArrayList<Capitulo> caps=DaoCapitulo.obtenerList(new String(responseBody));
@@ -128,7 +127,7 @@ public class HistoriaActivity extends AppCompatActivity {
                     }
                     elementAdapter = new AdapterVistaHistoria(itemList,getBaseContext());
                     rvHistoria.setAdapter(elementAdapter);
-//                    rvHistoria2.setAdapter(elementAdapter);
+
                     elementAdapter.notifyDataSetChanged();
                     layoutPB.setVisibility(View.GONE);
                 }
