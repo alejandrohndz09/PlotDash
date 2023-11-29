@@ -103,10 +103,8 @@ public class HomeFragment extends Fragment {
 
                 if (statusCode == 200) {
                     Map<String, Object> combo = new HashMap<>();
-
                     combo.put("titulo", titulo);
                     combo.put("historiaList", DaoHistoria.obtenerList(new String(responseBody)));
-                    System.out.println(new String(responseBody));
                     comboHistoriaList.add(combo);
                     comboHistoriaAdapter = new AdapterHistoriaCombo(comboHistoriaList, vista.getContext());
                     rv_parent.setAdapter(comboHistoriaAdapter);

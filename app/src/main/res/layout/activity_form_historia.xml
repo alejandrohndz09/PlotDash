@@ -5,25 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:scrollbars="vertical"
     tools:context=".ui.activity.FormHistoriaActivity">
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/layoutPB2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible" />
+    </LinearLayout>
+
+
+    <com.flavio.plotdash.ui.util.CustomScrollView
+        android:id="@+id/contenedor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="70dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
             <!--formulario-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:paddingVertical="5dp"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                >
+                android:paddingVertical="5dp">
 
 
                 <LinearLayout
@@ -31,10 +47,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:paddingLeft="10dp"
-                    android:paddingRight="25dp"
-                    android:orientation="horizontal">
-
+                    android:paddingRight="25dp">
 
 
                     <androidx.cardview.widget.CardView
@@ -52,15 +67,16 @@
                             android:layout_width="100dp"
                             android:layout_height="125dp"
                             android:backgroundTint="?attr/editTextBackground"
-                            android:paddingTop="25dp"
                             android:drawableTop="@android:drawable/ic_menu_add"
                             android:insetTop="0dp"
                             android:insetBottom="0dp"
+                            android:paddingTop="25dp"
                             android:text="Añadir Portada"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 
                     </androidx.cardview.widget.CardView>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -72,36 +88,38 @@
                             android:layout_height="wrap_content"
                             android:layout_marginVertical="15dp"
                             android:orientation="vertical">
+
                             <TextView
-                                android:paddingLeft="6dp"
-                                android:textColor="?attr/colorOnSecondary"
-                                android:maxLines="3"
+                                android:textStyle="bold"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:maxLines="3"
+                                android:paddingLeft="6dp"
                                 android:text="Título"
-                                android:textSize="25sp"
-                                android:textStyle="bold"/>
+                                android:textColor="?attr/colorOnSecondary"
+                                android:textSize="18sp" />
 
 
                             <EditText
-                                android:id="@+id/titulo"
+                                android:id="@+id/etTitulo"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
                                 android:layout_marginVertical="3dp"
-                                android:minHeight="45dp"
+                                android:layout_marginLeft="10dp"
                                 android:background="@drawable/edittext"
                                 android:elevation="5dp"
-                                android:padding="8dp"
-                                android:importantForAutofill="no" />
+                                android:hint="Título de historia"
+                                android:importantForAutofill="no"
+                                android:minHeight="45dp"
+                                android:padding="8dp" />
                         </LinearLayout>
-
 
 
                     </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -116,17 +134,17 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:maxLines="6"
-                        android:paddingLeft="6dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:maxLines="6"
+                        android:paddingLeft="6dp"
                         android:text="Descripción"
                         android:textStyle="bold"
                         android:textColor="?attr/colorOnSecondary"
-                        android:textSize="18sp"
-                        />
+                        android:textSize="18sp" />
+
                     <EditText
-                        android:id="@+id/descripcion"
+                        android:id="@+id/etDescripcion"
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
                         android:layout_marginHorizontal="10dp"
@@ -135,10 +153,11 @@
                         android:elevation="5dp"
                         android:ems="10"
                         android:gravity="left|top"
+                        android:hint="Describa una sinopsis o resumen de la historia..."
+                        android:importantForAutofill="no"
                         android:inputType="textMultiLine"
                         android:padding="8dp"
-                        android:scrollbars="vertical"
-                        android:importantForAutofill="no" />
+                        android:scrollbars="vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -149,77 +168,92 @@
 
 
                     <TextView
-                        android:paddingLeft="6dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingLeft="6dp"
                         android:text="Género"
-                        android:textColor="?attr/colorOnSecondary"
                         android:textStyle="bold"
-                        android:textSize="18sp"
-                        />
+                        android:textColor="?attr/colorOnSecondary"
+                        android:textSize="18sp" />
 
                     <Spinner
-                        android:id="@+id/genero"
+                        android:id="@+id/spGenero"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginVertical="3dp"
-                        android:focusable="true"
                         android:background="@drawable/spinner"
                         android:elevation="5dp"
+                        android:focusable="true"
                         android:padding="8dp" />
                 </LinearLayout>
-
             </LinearLayout>
-
             <!--linea divisoria-->
-            <LinearLayout
+            <View
+                android:id="@+id/divider3"
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@drawable/edittext"
-                android:elevation="3dp"
-                android:orientation="vertical" />
+                android:layout_height="1dp"
+                android:layout_marginBottom="15dp"
+                android:background="?android:attr/listDivider" />
+
             <!--Lista de capitulos-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:paddingHorizontal="25dp">
+                android:orientation="vertical"
+                android:paddingHorizontal="15dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="6"
+                    android:textStyle="bold"
+                    android:paddingLeft="6dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="Contenido"
+                    android:textColor="?attr/colorOnSecondary"
+                    android:textSize="18sp" />
+
                 <ListView
                     android:id="@+id/caps"
+                    android:focusableInTouchMode="true"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="300dp"
+                    android:focusable="true"
+                    android:layout_marginBottom="25dp"
+                     />
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+
+    </com.flavio.plotdash.ui.util.CustomScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom">
-        <!--linea divisoria-->
-        <LinearLayout
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/divider2"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@drawable/edittext"
-            android:elevation="3dp"
-            android:orientation="vertical" />
-        <!--Panel agregar Capitulo-->
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnAddCap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="10dp"
+            android:backgroundTint="?attr/colorOnBackground"
+            android:drawableRight="@drawable/outline_playlist_add_24"
+            android:gravity="end|center_vertical"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:gravity="end|center_vertical"
-            android:backgroundTint="?attr/colorOnBackground"
+            android:paddingVertical="10dp"
+            android:text="Agregar Capítulo"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="Agregar Capítulo"
-            android:drawableRight="@drawable/outline_playlist_add_24"
-           />
+            android:textStyle="bold" />
     </LinearLayout>
 </FrameLayout>

@@ -136,7 +136,7 @@ public class AdapterVistaHistoria extends RecyclerView.Adapter<RecyclerView.View
 
         }
         public void bindData(Capitulo capitulo) {
-            tituloCap.setText(capitulo.getTitulo());
+            tituloCap.setText("Capitulo " +capitulo.getNum()+": "+capitulo.getTitulo());
             contenido.setText(capitulo.getContenido());
         }
 

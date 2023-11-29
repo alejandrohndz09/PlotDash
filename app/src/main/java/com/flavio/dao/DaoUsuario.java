@@ -20,14 +20,13 @@ public abstract class DaoUsuario {
     public static ArrayList<Usuario> obtenerList(String response) {
         ArrayList<Usuario> objetos=new ArrayList<>();
         try {
-
             JSONArray jsonArray = new JSONArray(response);
             String pattern = "yyyy-MM-dd";
             SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
             for (int i = 0; i < jsonArray.length(); i++) {
                 Usuario p = new Usuario(
                         jsonArray.getJSONObject(i).getInt("idUsuario"),
-                       "",
+                        jsonArray.getJSONObject(i).getString("foto"),
                         "",
                         "",
                         "",
