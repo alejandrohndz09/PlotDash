@@ -35,7 +35,9 @@ public abstract class DaoHistoria {
         parametros.put("descripcion", obj.getDescripcion());
         parametros.put("idGenero", obj.getIdGenero().getIdGenero());
         parametros.put("portada", obj.getPortada());
-        parametros.put("fecha_creacion", obj.getFecha_creacion());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String fechaCreacionString = obj.getFecha_creacion().format(formatter);
+        parametros.put("fecha_creacion", fechaCreacionString);
         parametros.put("idUsuario", obj.getIdUsuario().getIdUsuario());
         if (obj.getIdHistoria() > 0) {
             parametros.put("idHistoria", obj.getIdHistoria());
@@ -117,7 +119,7 @@ public abstract class DaoHistoria {
                         Capitulo capitulo = new Capitulo(
                                 capitulosArray.getJSONObject(j).getInt("idCapitulo"),
                                 historia,
-                                LocalDateTime.parse(capitulosArray.getJSONObject(i).getString("fecha_creado"), formatter),
+                                LocalDateTime.parse(capitulosArray.getJSONObject(j).getString("fecha_creado"), formatter),
                                 capitulosArray.getJSONObject(j).getString("titulo"),
                                 capitulosArray.getJSONObject(j).getString("contenido"),
                                 capitulosArray.getJSONObject(j).getInt("num")
@@ -126,6 +128,7 @@ public abstract class DaoHistoria {
                     }
                     historia.setCapitulos(capitulos);
                 }
+
 
                 if (jsonArray.getJSONObject(i).has("comentarios") && !jsonArray.getJSONObject(i).isNull("comentarios")) {
                     JSONArray comentariosArray = jsonArray.getJSONObject(i).getJSONArray("comentarios");

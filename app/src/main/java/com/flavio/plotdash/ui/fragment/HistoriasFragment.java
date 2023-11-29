@@ -147,7 +147,7 @@ public class HistoriasFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-    }
+        llenarLista();    }
 
     private void llenarLista() {
         RequestParams parametros = new RequestParams();

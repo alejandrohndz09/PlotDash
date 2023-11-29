@@ -16,6 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flavio.dao.DaoUsuario;
@@ -31,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     EditText usuario, clave;
+    TextView lblCrearCuenta;
     CardView alert;
     LinearLayout layoutPB;
     Context context;
@@ -51,6 +53,25 @@ public class LoginActivity extends AppCompatActivity {
         btnInicio = findViewById(R.id.btnInicio);
         sharedPreferences = getSharedPreferences("datos", Context.MODE_PRIVATE);
         getPreferencias();
+
+        lblCrearCuenta = findViewById(R.id.txtNotieneCuenta);
+        // Obtener el extra del intent
+        Intent intent = getIntent();
+        if (intent != null) {
+            String usuarioRegistrado = intent.getStringExtra("usuario");
+
+            // Hacer algo con el nombre de usuario, por ejemplo, establecerlo en el campo de nombre de usuario
+            if (usuarioRegistrado != null) {
+                usuario.setText(usuarioRegistrado);
+            }
+        }
+
+        lblCrearCuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this,RegistroActivity.class));
+            }
+        });
         btnInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

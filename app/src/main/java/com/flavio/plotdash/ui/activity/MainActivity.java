@@ -26,6 +26,7 @@ import com.flavio.plotdash.ui.fragment.BibliotecaFragment;
 import com.flavio.plotdash.ui.fragment.HistoriasFragment;
 import com.flavio.plotdash.ui.fragment.HomeFragment;
 import com.flavio.plotdash.ui.adapter.AdapterVistaPrincipal;
+import com.flavio.plotdash.ui.fragment.SettingFragment;
 import com.flavio.plotdash.ui.util.BitmapManage;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -38,11 +39,11 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     ViewPager2 pagerMain;
     Dialog dialog;
-    public static String URL_BASE = "http://192.168.16.49/plotdashserver/pages/";
+    // public static String URL_BASE = "http://192.168.1.5/plotdashserver/pages/";
     //public final static String URL_BASE = "http://plotdash.free.nf/plotdashserver/pages/";
     //public final static String URL_BASE = "https://plotdash.000webhostapp.com/plotdashserver/pages/";
 
-//    public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
+    public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
     //public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
     BottomNavigationView bmNav;
     ArrayList<Fragment> fragArray = new ArrayList<Fragment>();
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         fragArray.add(new HomeFragment());
         fragArray.add(new BibliotecaFragment());
         fragArray.add(new HistoriasFragment());
+        fragArray.add(new SettingFragment());
         AdapterVistaPrincipal adapterViewPage = new AdapterVistaPrincipal(this, fragArray);
         pagerMain.setAdapter(adapterViewPage);
 
@@ -75,11 +77,14 @@ public class MainActivity extends AppCompatActivity {
                     case 2:
                         bmNav.setSelectedItemId(R.id.opWrite);
                         break;
+                    case 3:
+                        bmNav.setSelectedItemId(R.id.opAjustes);
+                        break;
                 }
                 super.onPageSelected(position);
             }
         });
-        /*bmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        bmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
@@ -92,10 +97,14 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.opWrite:
                         pagerMain.setCurrentItem(2);
                         break;
+
+                    case R.id.opAjustes:
+                        pagerMain.setCurrentItem(3);
+                        break;
                 }
                 return true;
             }
-        });*/
+        });
     }
 
     @Override
@@ -138,11 +147,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     //Cierre de sesion,primero eliminamos las preferencias
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("usuario","");
+                    editor.putString("usuario", "");
                     editor.putString("clave", "");
                     editor.putBoolean("estado", false);
                     editor.commit();
-                    MainActivity.usuario=new Usuario();
+                    MainActivity.usuario = new Usuario();
                     //Luego mandamos la vista del login
                     Intent intent = new Intent(getBaseContext(), LoginActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -74,4 +74,3 @@ public class AdapterComentarioList extends ArrayAdapter<Comentario> {
         return convertView;
     }
 }
-
