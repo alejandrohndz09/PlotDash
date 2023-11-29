@@ -129,15 +129,16 @@ public abstract class DaoHistoria {
                     historia.setCapitulos(capitulos);
                 }
 
+
                 if (jsonArray.getJSONObject(i).has("comentarios") && !jsonArray.getJSONObject(i).isNull("comentarios")) {
                     JSONArray comentariosArray = jsonArray.getJSONObject(i).getJSONArray("comentarios");
                     ArrayList<Comentario> comentarios = new ArrayList<>();
                     for (int j = 0; j < comentariosArray.length(); j++) {
-                        JSONArray usuarioArray = jsonArray.getJSONObject(j).getJSONArray("usuario");
+                        JSONArray usuarioArray = comentariosArray.getJSONObject(j).getJSONArray("usuario");
                         Usuario usuario = new Usuario();
                         String pattern = "yyyy-MM-dd";
                         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-                        for (int k = 0; k < jsonArray.length(); k++) {
+                        for (int k = 0; k < usuarioArray.length(); k++) {
                             usuario = new Usuario(
                                     usuarioArray.getJSONObject(k).getInt("idUsuario"),
                                     usuarioArray.getJSONObject(k).getString("foto"),
@@ -149,13 +150,14 @@ public abstract class DaoHistoria {
                                     usuarioArray.getJSONObject(k).getString("usuario"),
                                     usuarioArray.getJSONObject(k).getString("clave")
 
+
                             );
                         }
                         Comentario comentario = new Comentario(
                                 comentariosArray.getJSONObject(j).getInt("idComentario"),
                                 usuario,
                                 historia,
-                                LocalDateTime.parse(comentariosArray.getJSONObject(i).getString("fecha"), formatter),
+                                LocalDateTime.parse(comentariosArray.getJSONObject(j).getString("fecha"), formatter),
                                 comentariosArray.getJSONObject(j).getString("comentario")
                         );
                         comentarios.add(comentario);

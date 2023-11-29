@@ -7,7 +7,6 @@
     tools:context=".ui.activity.HistoriaActivity"
     android:orientation="vertical"
     android:scrollbars="vertical">
-
     <LinearLayout
         android:id="@+id/layoutPB"
         android:visibility="visible"
@@ -63,13 +62,17 @@
             android:text="Agregar" />
 
     </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView
+  <!--  <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_historia2"
         android:layout_width="match_parent"
         android:layout_height="175dp" />
+-->
 
 
-
+    <ListView
+        android:id="@+id/listaComentario"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"/>
 
 
 </LinearLayout>
