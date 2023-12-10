@@ -1,11 +1,5 @@
 package com.flavio.plotdash.ui.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -19,9 +13,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 import com.flavio.plotdash.R;
 import com.flavio.plotdash.model.Usuario;
+import com.flavio.plotdash.ui.activity.LoginActivity;
 import com.flavio.plotdash.ui.fragment.BibliotecaFragment;
 import com.flavio.plotdash.ui.fragment.HistoriasFragment;
 import com.flavio.plotdash.ui.fragment.HomeFragment;
@@ -30,29 +29,29 @@ import com.flavio.plotdash.ui.fragment.SettingFragment;
 import com.flavio.plotdash.ui.util.BitmapManage;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
-    public static Usuario usuario;
-    SharedPreferences sharedPreferences;
-    ViewPager2 pagerMain;
-    Dialog dialog;
     // public static String URL_BASE = "http://192.168.1.5/plotdashserver/pages/";
     //public final static String URL_BASE = "http://plotdash.free.nf/plotdashserver/pages/";
     //public final static String URL_BASE = "https://plotdash.000webhostapp.com/plotdashserver/pages/";
 
     public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
     //public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
+    public static Usuario usuario;
+    SharedPreferences sharedPreferences;
+    ViewPager2 pagerMain;
+    Dialog dialog;
     BottomNavigationView bmNav;
-    ArrayList<Fragment> fragArray = new ArrayList<Fragment>();
+    ArrayList<Fragment> fragArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferences = getSharedPreferences("datos", Context.MODE_PRIVATE);
-        //getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
         dialog = new Dialog(this);
         pagerMain = findViewById(R.id.pagerMain);
@@ -105,34 +104,28 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-    }
 
-    @Override
-    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View view, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, view, menuInfo);
-        if (view.getId() == R.id.hist) {
-            this.getMenuInflater().inflate(R.menu.mis_historias_menu, menu);
+        // Obtiene la instancia actual de FirebaseAuth
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        // Obtiene el usuario actualmente autenticado
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            // El usuario está autenticado, puedes acceder a la información del usuario
+            String userEmail = currentUser.getEmail();
+            String userId = currentUser.getUid();
+
+            // Asegúrate de manejar la información del usuario según tus necesidades
+            // Por ejemplo, puedes mostrar el correo electrónico en la barra de acción:
+            getSupportActionBar().setTitle(userEmail);
+        } else {
+            // El usuario no está autenticado, puedes redirigirlo al LoginActivity u otra lógica
+            getSupportActionBar().setTitle("Usuario no autenticado");
         }
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_menu, menu);
-        MenuItem op = menu.findItem(R.id.profile);
-        //String url = "https://img.a.transfermarkt.technology/portrait/big/8198-1685035469.png?lm=1";
-        String url = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-        if (!usuario.getFoto().isEmpty()
-                && !usuario.getFoto().equals("null")) {
-            url = usuario.getFoto();
-        }
-        BitmapManage.convertGlideImageToDrawableOrBitmap(this, url, new BitmapManage.ImageConversionCallback() {
-            @Override
-            public void onImageConverted(Drawable drawable) {
-                op.setIcon(drawable);
-            }
-        });
-        return true;
-    }
 
+    // Resto del código...
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
