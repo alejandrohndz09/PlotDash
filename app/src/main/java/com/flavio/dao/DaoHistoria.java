@@ -1,7 +1,10 @@
 package com.flavio.dao;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.flavio.plotdash.model.Capitulo;
 import com.flavio.plotdash.model.Comentario;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.flavio.plotdash.model.Genero;
 import com.flavio.plotdash.model.Historia;
 import com.flavio.plotdash.model.Usuario;
@@ -42,6 +45,16 @@ public abstract class DaoHistoria {
         if (obj.getIdHistoria() > 0) {
             parametros.put("idHistoria", obj.getIdHistoria());
         }
+        ObjectMapper objectMapper = new ObjectMapper();
+        String capitulosJson = null;
+        try {
+            capitulosJson = objectMapper.writeValueAsString(obj.getCapitulos());
+            parametros.put("capitulos", capitulosJson);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+
         client.post(URL, parametros, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
