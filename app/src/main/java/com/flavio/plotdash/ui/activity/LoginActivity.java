@@ -144,6 +144,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void verificarYContinuar(FirebaseUser user) {
         if (correoElectronicoVerificado()) {
+
+            
+
+
             setPreferencias();
             Alert.show(getBaseContext(), "exito", "¡Hola! @" + user.getEmail(), Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
             Intent intent = new Intent(getBaseContext(), MainActivity.class);
