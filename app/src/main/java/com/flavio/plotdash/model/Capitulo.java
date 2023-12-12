@@ -1,5 +1,7 @@
 package com.flavio.plotdash.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -40,6 +42,7 @@ public class Capitulo  implements Serializable {
         this.idCapitulo = idCapitulo;
     }
 
+    @JsonBackReference
     public Historia getIdHistoria() {
         return idHistoria;
     }

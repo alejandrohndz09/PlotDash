@@ -4,15 +4,16 @@
     >
     <group>
         <item
-            android:id="@+id/subMenuOP12"
-            android:icon="@drawable/baseline_delete_outline_24"
-            android:title="Mover a papelera">
-        </item>
-        <item
-            android:id="@+id/subMenuOP22"
-            android:title="Ver detalles"
+            android:id="@+id/opPublicar"
+            android:title="Publicar"
             android:icon="@drawable/baseline_remove_red_eye_24"
             android:iconTint="?attr/colorOnPrimary"></item>
+        <item
+            android:id="@+id/opBorrar"
+            android:icon="@drawable/baseline_delete_outline_24"
+            android:title="Eliminar">
+        </item>
+
     </group>
 
 </menu>

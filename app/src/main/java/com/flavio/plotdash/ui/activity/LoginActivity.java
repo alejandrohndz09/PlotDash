@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void setPreferencias() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("usuario", MainActivity.usuario.getUsuario());
+        editor.putString("usuario", MainActivity.usuario.getCorreo());
         editor.putString("clave", MainActivity.usuario.getClave());
         editor.putBoolean("estado", true);
         editor.commit();

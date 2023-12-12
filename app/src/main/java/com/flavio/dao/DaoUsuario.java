@@ -15,7 +15,7 @@ import cz.msebera.android.httpclient.Header;
 
 public abstract class DaoUsuario {
 
-    public static String URL = MainActivity.URL_BASE+"DAOUsuarios.php";
+    public static String URL = MainActivity.URL_BASE+"DAOUsuarios1.php";
     public static String msj = "";
     public static ArrayList<Usuario> obtenerList(String response) {
         ArrayList<Usuario> objetos=new ArrayList<>();

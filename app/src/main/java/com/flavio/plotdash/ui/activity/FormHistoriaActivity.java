@@ -1,29 +1,39 @@
 package com.flavio.plotdash.ui.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flavio.dao.DaoCapitulo;
 import com.flavio.dao.DaoGenero;
 import com.flavio.dao.DaoHistoria;
 import com.flavio.dao.DaoUsuario;
@@ -50,6 +60,7 @@ public class FormHistoriaActivity extends AppCompatActivity {
     EditText etTitulo, etdescripcion;
     Spinner spGenero;
     ListView lvCaps;
+    AdaptadorCapituloList adaptador;
     Button btnAddCap;
     public static String opcion = "registrar";
     Historia historia;
@@ -72,7 +83,6 @@ public class FormHistoriaActivity extends AppCompatActivity {
         layoutPB = findViewById(R.id.layoutPB2);
         btnAddCap = findViewById(R.id.btnAddCap);
         prepararComponentes();
-        autoCompletar();
         llenarCapitulos();
         btnAddCap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +92,7 @@ public class FormHistoriaActivity extends AppCompatActivity {
                 startActivityForResult(intent, 2);
             }
         });
-
+        registerForContextMenu(lvCaps);
         lvCaps.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -100,7 +110,13 @@ public class FormHistoriaActivity extends AppCompatActivity {
                 return false;
             }
         });
-
+        lvCaps.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                showPopupMenu(view,(Capitulo) adapterView.getItemAtPosition(i));
+                return false;
+            }
+        });
 
     }
 
@@ -111,13 +127,15 @@ public class FormHistoriaActivity extends AppCompatActivity {
 
             etTitulo.setText(historia.getTitulo());
             etdescripcion.setText(historia.getDescripcion());
-
             for (int i = 0; i < generosList.size(); i++) {
                 if (generosList.get(i).getGenero().equals(historia.getIdGenero().getGenero())) {
                     spGenero.setSelection(i);
+
                     break;
                 }
             }
+
+
             llenarCapitulos();
         } else {
             historia = new Historia();
@@ -127,10 +145,8 @@ public class FormHistoriaActivity extends AppCompatActivity {
     private void prepararComponentes() {
         RequestParams parametros = new RequestParams();
         AsyncHttpClient client = new AsyncHttpClient();
-
         parametros.put("opcion", "buscarTodos");
         client.setTimeout(3000);
-
         client.post(DaoGenero.URL, parametros, new AsyncHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 if (statusCode == 200) {
@@ -140,27 +156,21 @@ public class FormHistoriaActivity extends AppCompatActivity {
                         generosList.add(0, new Genero(-1, "Seleccione un género"));
                         ArrayAdapter<Genero> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_spinner_item, generosList);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        // Después de actualizar generosList
+                        adapter.notifyDataSetChanged();
+
                         spGenero.setAdapter(adapter);
                         layoutPB.setVisibility(View.GONE);
+                        autoCompletar();
                     }
                 }
             }
-
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
             }
         });
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.form_historia_menu, menu);
-        MenuItem op = menu.findItem(R.id.opGuardar);
-        op.setTooltipText(opcion.equals("registrar") ? "Guardar" : "Modificar");
-        op.setIcon(opcion.equals("registrar") ? R.drawable.baseline_save_24 : R.drawable.baseline_save_as_24);
-        return true;
     }
 
     @Override
@@ -172,7 +182,6 @@ public class FormHistoriaActivity extends AppCompatActivity {
                 // Aquí obtienes el dato enviado desde la Actividad 2
                 Bundle parametros = data.getExtras();
                 Capitulo c = (Capitulo) parametros.get("capitulo");
-
                 if (historia.getCapitulos() == null) {
                     historia.setCapitulos(new ArrayList<>());
                     c.setNum(1);
@@ -181,6 +190,7 @@ public class FormHistoriaActivity extends AppCompatActivity {
                     c.setNum(historia.getCapitulos().size() + 1);
                     historia.getCapitulos().add(c);
                 } else if (c.getNum() != 0) {
+                    Alert.show(getBaseContext(), "exito", c.getTitulo(), Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
                     for (int i = 0; i < historia.getCapitulos().size(); i++) {
                         Capitulo x = historia.getCapitulos().get(i);
                         if (x.getIdCapitulo() == c.getIdCapitulo()) {
@@ -197,17 +207,32 @@ public class FormHistoriaActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        llenarCapitulos();
+        super.onResume();
+    }
+
     private void llenarCapitulos() {
-        if (historia.getCapitulos() == null) {
+        if (historia==null || historia.getCapitulos() == null) {
             String[] mensaje = {"Sin registros que mostrar"};
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mensaje);
             lvCaps.setAdapter(adapter);
         } else {
-            AdaptadorCapituloList adaptador = new AdaptadorCapituloList(this, R.layout.adapter_historia_list, historia.getCapitulos());
+            adaptador = new AdaptadorCapituloList(this, R.layout.adapter_historia_list, historia.getCapitulos());
             lvCaps.setAdapter(adaptador);
         }
     }
 
+    //Configuracion de menu de opciones en la barra superior
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.form_historia_menu, menu);
+        MenuItem op = menu.findItem(R.id.opGuardar);
+        op.setTooltipText(opcion.equals("registrar") ? "Guardar" : "Modificar");
+        op.setIcon(opcion.equals("registrar") ? R.drawable.baseline_save_24 : R.drawable.baseline_save_as_24);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -239,11 +264,20 @@ public class FormHistoriaActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                historia.setFecha_creacion(LocalDateTime.now(ZoneId.of("America/El_Salvador")));
-                historia.setIdUsuario(MainActivity.usuario);
+                if (opcion.equals("registrar")) {
+                    historia.setFecha_creacion(LocalDateTime.now(ZoneId.of("America/El_Salvador")));
+                    historia.setIdUsuario(MainActivity.usuario);
+                }
+
               if(  DaoHistoria.operarDatos(historia,"registrar")){
-                  Alert.show(getBaseContext(), "exito", "Historia creada exitosamente", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
-                  finish();
+                  if (opcion.equals("registrar")) {
+                      Alert.show(getBaseContext(), "exito", "Historia creada exitosamente", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                      finish();
+                  }else{
+                      Alert.show(getBaseContext(), "exito", "Historia editada exitosamente", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                      finish();
+                      opcion="registrar";
+                  }
                 }else{
                   Alert.show(getBaseContext(), "error", "Ha ocurrido un error", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
               }
@@ -253,4 +287,73 @@ public class FormHistoriaActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Configuracion de menu contextual en lista de capitulos
+    private void showPopupMenu(View view, Capitulo capitulo) {
+
+        // Crear una instancia de PopupMenu
+        PopupMenu popupMenu = new PopupMenu(getBaseContext(), view);
+
+        // Inflar el menú desde un recurso XML
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.capitulo_menu, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                // Lógica para manejar clics en elementos del menú
+                switch (item.getItemId()) {
+                    case R.id.opModificarC:
+                        FormCapituloActivity.opcion = "modificar";
+                        Intent intent = new Intent(getBaseContext(), FormCapituloActivity.class);
+                        intent.putExtra("capituloM",capitulo);
+                        startActivityForResult(intent, 2);
+
+
+                        return true;
+                    case R.id.opEliminarC:
+                        Dialog dialog = new Dialog(view.getContext());
+                        dialog.setContentView(R.layout.util_dialog);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        TextView msjD = dialog.findViewById(R.id.msjD);
+                        ImageView iconD = dialog.findViewById(R.id.iconDialog);
+                        Button btnPos = dialog.findViewById(R.id.btnPos);
+                        Button btnNeg = dialog.findViewById(R.id.btnNeg);
+                        msjD.setText("Esta a punto de eliminar este " +
+                                "capítulo ¿Desea continuar?");
+                        iconD.setImageResource(R.drawable.outline_warning_amber_24);
+                        btnPos.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if( DaoCapitulo.operarDatos(capitulo,"eliminar")){
+                                    Alert.show(getBaseContext(), "info", "Se ha removido el capítulo.", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, view.findViewById(R.id.toastCustom)));
+                                    llenarCapitulos();
+                                }else{
+                                    Alert.show(getBaseContext(), "error", "Ha ocurrido un error.", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, view.findViewById(R.id.toastCustom)));
+                                }
+                                dialog.dismiss();
+                            }
+
+                        });
+                        btnNeg.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+
+                        return true;
+                }
+                return true;
+            }
+        });
+
+        // Mostrar el menú emergente
+        popupMenu.show();
+    }
+    @Override
+    public void onBackPressed() {
+        opcion="registrar";
+        super.onBackPressed();
+    }
 }
