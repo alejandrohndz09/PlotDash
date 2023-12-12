@@ -1,11 +1,10 @@
 package com.flavio.dao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.flavio.plotdash.model.Capitulo;
 import com.flavio.plotdash.model.Comentario;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.flavio.plotdash.model.Genero;
 import com.flavio.plotdash.model.Historia;
 import com.flavio.plotdash.model.Usuario;
@@ -13,7 +12,6 @@ import com.flavio.plotdash.ui.activity.MainActivity;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 
 import org.json.JSONArray;
 

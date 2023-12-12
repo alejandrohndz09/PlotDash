@@ -52,6 +52,7 @@ import com.loopj.android.http.RequestParams;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -110,10 +111,22 @@ public class FormHistoriaActivity extends AppCompatActivity {
                 return false;
             }
         });
+        lvCaps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                FormCapituloActivity.opcion = "modificar";
+                Intent intent = new Intent(getBaseContext(), FormCapituloActivity.class);
+                intent.putExtra("capituloM",(Capitulo) adapterView.getItemAtPosition(i));
+                startActivityForResult(intent, 2);
+
+
+            }
+        });
+
         lvCaps.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showPopupMenu(view,(Capitulo) adapterView.getItemAtPosition(i));
+              showPopupMenu(view,(Capitulo) adapterView.getItemAtPosition(i));
                 return false;
             }
         });
@@ -190,7 +203,7 @@ public class FormHistoriaActivity extends AppCompatActivity {
                     c.setNum(historia.getCapitulos().size() + 1);
                     historia.getCapitulos().add(c);
                 } else if (c.getNum() != 0) {
-                    Alert.show(getBaseContext(), "exito", c.getTitulo(), Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+
                     for (int i = 0; i < historia.getCapitulos().size(); i++) {
                         Capitulo x = historia.getCapitulos().get(i);
                         if (x.getIdCapitulo() == c.getIdCapitulo()) {
@@ -219,7 +232,9 @@ public class FormHistoriaActivity extends AppCompatActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), android.R.layout.simple_list_item_1, mensaje);
             lvCaps.setAdapter(adapter);
         } else {
-            adaptador = new AdaptadorCapituloList(this, R.layout.adapter_historia_list, historia.getCapitulos());
+            ArrayList<Capitulo> listaCaps=new ArrayList<>(historia.getCapitulos());
+            listaCaps.removeIf(capitulo -> capitulo.getNum() == -1);
+            adaptador = new AdaptadorCapituloList(this, R.layout.adapter_historia_list, listaCaps);
             lvCaps.setAdapter(adaptador);
         }
     }
@@ -324,14 +339,10 @@ public class FormHistoriaActivity extends AppCompatActivity {
                         btnPos.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if( DaoCapitulo.operarDatos(capitulo,"eliminar")){
-                                    Alert.show(getBaseContext(), "info", "Se ha removido el capítulo.", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, view.findViewById(R.id.toastCustom)));
-                                    llenarCapitulos();
-                                }else{
-                                    Alert.show(getBaseContext(), "error", "Ha ocurrido un error.", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, view.findViewById(R.id.toastCustom)));
-                                }
+                                eliminarYReordenar(capitulo);
                                 dialog.dismiss();
                             }
+
 
                         });
                         btnNeg.setOnClickListener(new View.OnClickListener() {
@@ -351,6 +362,26 @@ public class FormHistoriaActivity extends AppCompatActivity {
         // Mostrar el menú emergente
         popupMenu.show();
     }
+    private void eliminarYReordenar(Capitulo capitulo) {
+        for (int i = 0; i < historia.getCapitulos().size(); i++) {
+            Capitulo capituloActual = historia.getCapitulos().get(i);
+
+            // Suponiendo que tienes un método equals() en la clase Capitulo
+            if (capituloActual.equals(capitulo)) {
+                historia.getCapitulos().get(i).setNum(-1);
+                // Reordenar los números de los capítulos restantes
+                for (int j = i + 1; j <  historia.getCapitulos().size(); j++) {
+                    Capitulo capituloRestante =  historia.getCapitulos().get(j);
+                    capituloRestante.setNum(capituloRestante.getNum() - 1);
+                }
+
+                // Romper el bucle después de marcar y reordenar
+                break;
+            }
+        }
+        llenarCapitulos();
+    }
+
     @Override
     public void onBackPressed() {
         opcion="registrar";
