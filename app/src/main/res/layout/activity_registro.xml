@@ -32,18 +32,18 @@
         android:layout_height="wrap_content"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:layout_marginHorizontal="25dp"
+        android:layout_marginHorizontal="5dp"
 
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="0dp"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
+            android:layout_marginTop="30dp"
             android:text="¡Bienvenido!"
             android:textColor="?attr/colorPrimary"
-            android:textSize="35sp"
+            android:textSize="25sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -51,9 +51,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginVertical="15dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginVertical="5dp"
         android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imagePreview"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/baseline_person_24"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+
+            android:layout_marginBottom="5dp"/>
+
+        <Button
+            android:id="@+id/btnSelectImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar Imagen"
+            android:layout_gravity="center_horizontal"
+           />
 
         <TextView
             android:layout_width="match_parent"

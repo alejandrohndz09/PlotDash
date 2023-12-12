@@ -14,6 +14,15 @@ public class Usuario  implements Serializable {
     private String usuario;
     private String clave;
 
+    public Usuario(String foto, String nombre, String correo) {
+        this.foto = foto;
+        this.nombre = nombre;
+        this.correo = correo;
+    }
+
+    public Usuario() {
+        // Constructor vacío requerido para DataSnapshot.getValue(Usuario.class)
+    }
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -86,8 +95,7 @@ public class Usuario  implements Serializable {
         this.clave = clave;
     }
 
-    public Usuario() {
-    }
+
 
     public Usuario(int idUsuario) {
         this.idUsuario = idUsuario;
