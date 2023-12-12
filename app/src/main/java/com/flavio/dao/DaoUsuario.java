@@ -25,17 +25,7 @@ public abstract class DaoUsuario {
             SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
             for (int i = 0; i < jsonArray.length(); i++) {
                 Usuario p = new Usuario(
-                        jsonArray.getJSONObject(i).getInt("idUsuario"),
-                        jsonArray.getJSONObject(i).getString("foto"),
-                        "",
-                        "",
-                        "",
-                        null,
-                        jsonArray.getJSONObject(i).getString("correo"),
-                        jsonArray.getJSONObject(i).getString("usuario"),
-                        jsonArray.getJSONObject(i).getString("clave")
-
-                );
+                        jsonArray.getJSONObject(i).getInt("idUsuario"));
                 objetos.add(p);
 
             }

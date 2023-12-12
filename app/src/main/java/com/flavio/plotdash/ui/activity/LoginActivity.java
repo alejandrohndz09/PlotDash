@@ -1,9 +1,5 @@
 package com.flavio.plotdash.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -20,10 +16,31 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
+import com.flavio.dao.DaoUsuario;
 import com.flavio.plotdash.R;
+import com.flavio.plotdash.model.Usuario;
 import com.flavio.plotdash.ui.util.Alert;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+
+import cz.msebera.android.httpclient.Header;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -132,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         if (user != null) {
-                            verificarYContinuar(user);
+                            verificarYContinuar(user,clave);
                         } else {
                             Alert.show(getBaseContext(), "error", "Error al obtener información del usuario", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
                         }
@@ -141,15 +158,13 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-
-    private void verificarYContinuar(FirebaseUser user) {
+    private void verificarYContinuar(FirebaseUser user,String pass) {
         if (correoElectronicoVerificado()) {
 
-            
-
-
-            setPreferencias();
             Alert.show(getBaseContext(), "exito", "¡Hola! @" + user.getEmail(), Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+
+
+            guardarPreferencias(user.getEmail(),pass);
             Intent intent = new Intent(getBaseContext(), MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getBaseContext().startActivity(intent);
@@ -177,6 +192,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+
     private void reenviarCorreoVerificacion() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -203,12 +220,10 @@ public class LoginActivity extends AppCompatActivity {
             layoutPB.setVisibility(View.GONE);
         }
     }
-
-    private void setPreferencias() {
+    private void guardarPreferencias(String usuario, String clave) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("usuario", usuario.getText().toString());
-        editor.putString("clave", clave.getText().toString());
-        editor.putBoolean("estado", true);
+        editor.putString("usuario", usuario);
+        editor.putString("clave", clave);
         editor.apply();
     }
 }
