@@ -41,25 +41,9 @@ public class AdapterBiblioteca extends ArrayAdapter<Biblioteca> {
         TextView tipo = convertView.findViewById(R.id.tipo_biblioteca);
 
 
-        nombre.setText(((Biblioteca) persona).getNombre());
+        nombre.setText(((Biblioteca) persona).getNombre()+" ("+ persona.getDetalles().size()+" historias)");
         fecha.setText(((Biblioteca) persona).getFecha_creacion().toString());
-        //nombre.setText(((Biblioteca) persona).getTipo());
 
-
-        // sexo_edad.setText(((Historia) persona).getSexo()+", "+((Historia) persona).getEdad()+" años");
-        //telefono.setText(((Historia) persona).getTelefono());
-        View finalConvertView = convertView;
-       /* btnEditar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity.opcion="modificar";
-
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("contacto",(Historia) persona);
-                getContext().startActivity(intent);
-            }
-        });*/
 
         return convertView;
     }

@@ -1,5 +1,7 @@
 package com.flavio.plotdash.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -113,7 +115,7 @@ public class Historia implements Serializable {
         return estado;
     }
 
-    public void setEstado(int vistas) {
+    public void setEstado(int estado) {
         this.estado = estado;
     }
 
@@ -125,6 +127,7 @@ public class Historia implements Serializable {
         this.calificacion = calificacion;
     }
 
+    @JsonManagedReference
     public ArrayList<Capitulo> getCapitulos() {
         return capitulos;
     }
