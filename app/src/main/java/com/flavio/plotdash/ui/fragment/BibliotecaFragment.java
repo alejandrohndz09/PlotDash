@@ -16,6 +16,7 @@ import com.flavio.dao.DaoBiblioteca;
 
 import com.flavio.plotdash.R;
 
+import com.flavio.plotdash.ui.activity.MainActivity;
 import com.flavio.plotdash.ui.adapter.AdapterBiblioteca;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -98,7 +99,8 @@ public class BibliotecaFragment extends Fragment {
         AsyncHttpClient client = new AsyncHttpClient();
 
 
-        parametros.put("opcion", "buscar");
+        parametros.put("opcion", "buscarPorUsuario");
+        parametros.put("idUsuario", MainActivity.usuario.getIdUsuario());
 
         RequestHandle post = client.post(DaoBiblioteca.URL, parametros, new AsyncHttpResponseHandler() {
             @Override
@@ -115,7 +117,7 @@ public class BibliotecaFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                System.out.println("NOIIII"+new String(responseBody));
             }
         });
         client.cancelAllRequests(true);

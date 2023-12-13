@@ -166,13 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View view, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, view, menuInfo);
-        if (view.getId() == R.id.hist) {
-            this.getMenuInflater().inflate(R.menu.mis_historias_menu, menu);
-        }
-    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options_menu, menu);

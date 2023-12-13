@@ -1,5 +1,8 @@
 package com.flavio.dao;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.flavio.plotdash.model.Capitulo;
 import com.flavio.plotdash.model.Comentario;
 import com.flavio.plotdash.model.Genero;
@@ -9,7 +12,6 @@ import com.flavio.plotdash.ui.activity.MainActivity;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 
 import org.json.JSONArray;
 
@@ -38,10 +40,23 @@ public abstract class DaoHistoria {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String fechaCreacionString = obj.getFecha_creacion().format(formatter);
         parametros.put("fecha_creacion", fechaCreacionString);
+        parametros.put("estado", obj.getEstado());
         parametros.put("idUsuario", obj.getIdUsuario().getIdUsuario());
         if (obj.getIdHistoria() > 0) {
             parametros.put("idHistoria", obj.getIdHistoria());
         }
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        System.out.println("tamaño->"+obj.getCapitulos().size());
+        String capitulosJson = null;
+        try {
+            capitulosJson = objectMapper.writeValueAsString(obj.getCapitulos());
+            parametros.put("capitulos", capitulosJson);
+        } catch (JsonProcessingException e) {
+            System.err.println("jsonError -> "+e.getMessage());
+         //   throw new RuntimeException(e);
+        }
+        System.out.println("json -> "+capitulosJson);
         client.post(URL, parametros, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -52,11 +67,13 @@ public abstract class DaoHistoria {
                     msj = new String(responseBody);
                     re[0] = 0;
                 }
+                System.out.println("--------------holaaaa------------"+msj);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                System.out.println("---hola---" + new String(responseBody));
+                msj = new String(responseBody);
+                System.out.println("---hosla---"+msj+"-" + error.getMessage());
             }
         });
         return re[0] == 0;
