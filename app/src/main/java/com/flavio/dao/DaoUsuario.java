@@ -15,7 +15,7 @@ import cz.msebera.android.httpclient.Header;
 
 public abstract class DaoUsuario {
 
-    public static String URL = MainActivity.URL_BASE+"DAOUsuarios1.php";
+    public static String URL = MainActivity.URL_BASE+"DAOUsuarios.php";
     public static String msj = "";
     public static ArrayList<Usuario> obtenerList(String response) {
         ArrayList<Usuario> objetos=new ArrayList<>();
@@ -25,7 +25,15 @@ public abstract class DaoUsuario {
             SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
             for (int i = 0; i < jsonArray.length(); i++) {
                 Usuario p = new Usuario(
-                        jsonArray.getJSONObject(i).getInt("idUsuario"));
+                         jsonArray.getJSONObject(i).getInt("idUsuario"),
+                        jsonArray.getJSONObject(i).getString("foto"),
+                        "",
+                        "",
+                        "",
+                        null,
+                        jsonArray.getJSONObject(i).getString("correo"),
+                        jsonArray.getJSONObject(i).getString("usuario"),
+                        jsonArray.getJSONObject(i).getString("clave"));
                 objetos.add(p);
 
             }

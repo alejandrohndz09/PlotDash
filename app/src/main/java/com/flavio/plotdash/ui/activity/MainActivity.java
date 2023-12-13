@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                 if (statusCode == 200) {
                     if (DaoUsuario.obtenerList(new String(responseBody)).size() > 0) {
                         MainActivity.usuario = DaoUsuario.obtenerList(new String(responseBody)).get(0);
-                        Alert.show(getBaseContext(), "error", ""+MainActivity.usuario.getIdUsuario(),Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+
 
                     } else {
                         Alert.show(getBaseContext(), "error", "Credenciales Incorrectas",Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
