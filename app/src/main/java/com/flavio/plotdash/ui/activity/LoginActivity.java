@@ -1,38 +1,51 @@
 package com.flavio.plotdash.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+
 import com.flavio.dao.DaoUsuario;
 import com.flavio.plotdash.R;
+import com.flavio.plotdash.model.Usuario;
 import com.flavio.plotdash.ui.util.Alert;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 
 public class LoginActivity extends AppCompatActivity {
 
-
     EditText usuario, clave;
-    TextView lblCrearCuenta;
+    TextView lblCrearCuenta, forgotPassword;
     CardView alert;
     LinearLayout layoutPB;
     Context context;
@@ -45,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        context=this;
+        context = this;
         layoutPB = findViewById(R.id.layoutPB2);
         usuario = findViewById(R.id.usuario);
         clave = findViewById(R.id.clave);
@@ -55,12 +68,11 @@ public class LoginActivity extends AppCompatActivity {
         getPreferencias();
 
         lblCrearCuenta = findViewById(R.id.txtNotieneCuenta);
-        // Obtener el extra del intent
+        forgotPassword = findViewById(R.id.forgotPassword);
+
         Intent intent = getIntent();
         if (intent != null) {
             String usuarioRegistrado = intent.getStringExtra("usuario");
-
-            // Hacer algo con el nombre de usuario, por ejemplo, establecerlo en el campo de nombre de usuario
             if (usuarioRegistrado != null) {
                 usuario.setText(usuarioRegistrado);
             }
@@ -69,124 +81,150 @@ public class LoginActivity extends AppCompatActivity {
         lblCrearCuenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this,RegistroActivity.class));
+                startActivity(new Intent(LoginActivity.this, RegistroActivity.class));
             }
         });
+
         btnInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!usuario.getText().toString().isEmpty() && !clave.getText().toString().isEmpty()) {
-                    iniciar(usuario.getText().toString(), clave.getText().toString());
+                if (!TextUtils.isEmpty(usuario.getText().toString()) && !TextUtils.isEmpty(clave.getText().toString())) {
+                    iniciarSesionConCorreoYClave(usuario.getText().toString(), clave.getText().toString());
                 } else {
                     Alert.show(getBaseContext(), "error", "Campos vacíos", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
                 }
             }
         });
-    }
-    private void setPreferencias() {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("usuario", MainActivity.usuario.getCorreo());
-        editor.putString("clave", MainActivity.usuario.getClave());
-        editor.putBoolean("estado", true);
-        editor.commit();
-    }
 
-    private void getPreferencias() {
-        if (!sharedPreferences.getString("usuario", "").isEmpty()) {
-            iniciar(sharedPreferences.getString("usuario", ""), sharedPreferences.getString("clave", ""));
-        } else {
-            layoutPB.setVisibility(View.GONE);
-        }
-    }
 
-    private void iniciar(String usuario, String clave) {
-        RequestParams parametros = new RequestParams();
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        parametros.put("opcion", "inicioSesion");
-        parametros.put("usuario", usuario);
-        parametros.put("clave", clave);
-        client.setTimeout(3000);
-
-        client.post(DaoUsuario.URL, parametros, new AsyncHttpResponseHandler() {
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onStart() {
-                alert.setVisibility(View.VISIBLE);
-               Animation fadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-                alert.startAnimation(fadeInAnimation);
-                alert.requestFocus();
-            }
-
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                if (statusCode == 200) {
-                    if (DaoUsuario.obtenerList(new String(responseBody)).size() > 0) {
-                        MainActivity.usuario = DaoUsuario.obtenerList(new String(responseBody)).get(0);
-                        setPreferencias();
-                        Alert.show(getBaseContext(), "exito", "¡Hola! @" + MainActivity.usuario.getUsuario(), Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
-                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getBaseContext().startActivity(intent);
-                        finish();
-                    } else {
-                        Alert.show(getBaseContext(), "error", "Credenciales Incorrectas", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
-                    }
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                AnimationUtilas.animateFadeOut(alert);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                if (error instanceof java.net.SocketTimeoutException) {
-                    // Maneja el timeout aquí
-                    Alert.confirmDialog(context, "Ha ocurrido un error, revisa tu conexión a internet", "info",
-                            new Alert.DialogCustumizer() {
-                        @Override
-                        public void custumizer(Dialog dialog) {
-                            dialog.setCancelable(false);
-                            ((Button) dialog.findViewById(R.id.btnNeg)).setText("Cerrar");
-                            ((Button) dialog.findViewById(R.id.btnPos)).setText("Reintentar");
-                        }
-                        @Override
-                        public void onPositiveClick(Dialog dialog) {
-                            getPreferencias();
-                            dialog.dismiss();
-                        }
-                        @Override
-                        public void onNegativeClick(Dialog dialog) {
-                            dialog.dismiss();
-                            finish();
-                        }
-                    }).show();
-                } else {
-                    System.out.println(error.getMessage()/*new String(responseBody)*/);
-                }
+            public void onClick(View view) {
+                mostrarDialogoRecuperarContrasena();
             }
         });
     }
 
-    public static class AnimationUtilas {
-        public static void animateFadeOut(final View view) {
-            Animation fadeOutAnimation = AnimationUtils.loadAnimation(view.getContext(), android.R.anim.fade_out);
-            fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
+    private void mostrarDialogoRecuperarContrasena() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Recuperar Contraseña");
+        View viewInflated = getLayoutInflater().inflate(R.layout.dialog_recuperar_contrasena, null);
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    view.setVisibility(View.INVISIBLE);
-                }
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) final EditText inputEmail = viewInflated.findViewById(R.id.inputEmailRecuperar);
+        builder.setView(viewInflated);
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
+        builder.setPositiveButton("Recuperar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String email = inputEmail.getText().toString();
+                if (!TextUtils.isEmpty(email)) {
+                    resetearContrasena(email);
                 }
-            });
-            view.startAnimation(fadeOutAnimation);
+            }
+        });
+
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void resetearContrasena(String email) {
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Alert.show(getBaseContext(), "exito", "Correo de restablecimiento enviado", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                    } else {
+                        Alert.show(getBaseContext(), "error", "Error al enviar el correo de restablecimiento", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                    }
+                });
+    }
+
+    private void iniciarSesionConCorreoYClave(String correo, String clave) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(correo, clave)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null) {
+                            verificarYContinuar(user,clave);
+                        } else {
+                            Alert.show(getBaseContext(), "error", "Error al obtener información del usuario", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                        }
+                    } else {
+                        Alert.show(getBaseContext(), "error", "Credenciales Incorrectas", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                    }
+                });
+    }
+    private void verificarYContinuar(FirebaseUser user,String pass) {
+        if (correoElectronicoVerificado()) {
+
+            Alert.show(getBaseContext(), "exito", "¡Hola! @" + user.getEmail(), Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+
+
+            guardarPreferencias(user.getEmail(),pass);
+            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getBaseContext().startActivity(intent);
+            finish();
+        } else {
+            Alert.confirmDialog(context, "Tu correo electrónico aún no ha sido verificado. ¿Deseas reenviar el correo de verificación?",
+                    "info",
+                    new Alert.DialogCustumizer() {
+                        @Override
+                        public void custumizer(Dialog dialog) {
+                            // Configurar el diálogo según tus necesidades
+                        }
+
+                        @Override
+                        public void onPositiveClick(Dialog dialog) {
+                            reenviarCorreoVerificacion();
+                            dialog.dismiss();
+                        }
+
+                        @Override
+                        public void onNegativeClick(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    }).show();
         }
     }
 
+
+
+    private void reenviarCorreoVerificacion() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            user.sendEmailVerification()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Alert.show(getBaseContext(), "exito", "Correo de verificación enviado", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                        } else {
+                            Alert.show(getBaseContext(), "error", "Error al enviar el correo de verificación", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                        }
+                    });
+        }
+    }
+
+    private boolean correoElectronicoVerificado() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return user != null && user.isEmailVerified();
+    }
+
+    private void getPreferencias() {
+        if (!TextUtils.isEmpty(sharedPreferences.getString("usuario", ""))) {
+            iniciarSesionConCorreoYClave(sharedPreferences.getString("usuario", ""), sharedPreferences.getString("clave", ""));
+        } else {
+            layoutPB.setVisibility(View.GONE);
+        }
+    }
+    private void guardarPreferencias(String usuario, String clave) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("usuario", usuario);
+        editor.putString("clave", clave);
+        editor.apply();
+    }
 }

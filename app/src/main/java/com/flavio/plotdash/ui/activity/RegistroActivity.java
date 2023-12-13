@@ -1,25 +1,25 @@
 package com.flavio.plotdash.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -27,6 +27,13 @@ import com.flavio.dao.DaoUsuario;
 import com.flavio.plotdash.R;
 import com.flavio.plotdash.model.Usuario;
 import com.flavio.plotdash.ui.util.Alert;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -34,22 +41,29 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 
 public class RegistroActivity extends AppCompatActivity {
 
-    EditText usuario, clave, claveR, email;
+    EditText usuario, clave, claveR, email, etNombre, etFotoPerfil;
     TextView tieneCuenta;
     CardView alert;
     LinearLayout layoutPB;
     Context context;
     Button btnInicio;
-    public static String opcion = "registrar";
     Usuario usu;
-    AlertDialog.Builder alertDialog;
+    private FirebaseAuth auth;
     SharedPreferences sharedPreferences;
+    ImageView imagePreview;
+    Button btnSelectImage;
+
+    // Constante para identificar la solicitud de selección de imagen
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -58,14 +72,33 @@ public class RegistroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
         context = this;
-        alertDialog = new AlertDialog.Builder(this);
+
         layoutPB = findViewById(R.id.layoutPB2);
+
+        // inicialisacion de variables
         usuario = findViewById(R.id.usuario);
         email = findViewById(R.id.email);
         claveR = findViewById(R.id.claveR);
         clave = findViewById(R.id.clave);
+        btnSelectImage = findViewById(R.id.btnSelectImage);
         alert = findViewById(R.id.alert);
         btnInicio = findViewById(R.id.btnInicio);
+        imagePreview = findViewById(R.id.imagePreview);
+        btnSelectImage = findViewById(R.id.btnSelectImage);
+
+        btnSelectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Lanzar la actividad de selección de imagen
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Seleccionar Imagen"), PICK_IMAGE_REQUEST);
+            }
+        });
+
+        // Inicializar Firebase Auth
+        auth = FirebaseAuth.getInstance();
 
         sharedPreferences = getSharedPreferences("datos", Context.MODE_PRIVATE);
         getPreferencias();
@@ -81,7 +114,6 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    // El campo de texto ha perdido el foco, se ejecuta la lógica de fortaleza aquí
                     updateRegisterButtonState();
                 }
             }
@@ -90,8 +122,6 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    // El campo de texto de usuario ha perdido el foco, se ejecuta la lógica de validación aquí
-
                     updateRegisterButtonState();
                 }
             }
@@ -100,7 +130,6 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    // El campo de texto ha perdido el foco, se ejecuta la lógica de fortaleza aquí
                     updateStrength(clave.getText().toString());
                     updateRegisterButtonState();
                 }
@@ -110,20 +139,25 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    // El campo de texto ha perdido el foco, se ejecuta la lógica de verificación de contraseñas aquí
                     verificarContraseñas(clave.getText().toString(), claveR.getText().toString());
                     updateRegisterButtonState();
                 }
             }
         });
 
-
         btnInicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!usuario.getText().toString().isEmpty() && !clave.getText().toString().isEmpty() && !claveR.getText().toString().isEmpty() && !email.getText().toString().isEmpty()) {
-                    // Registrar en el servidor y verificar disponibilidad
-                    registrar(usuario.getText().toString(), clave.getText().toString(), claveR.getText().toString(), email.getText().toString());
+                    // Cambio: Obtener la imagen como una cadena Base64
+                    String fotoPerfil = convertImageToBase64();
+                    registrar(
+                            usuario.getText().toString(),
+                            clave.getText().toString(),
+                            claveR.getText().toString(),
+                            email.getText().toString(),
+                            fotoPerfil
+                    );
                 } else {
                     Alert.show(getBaseContext(), "error", "Campos vacíos", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
                 }
@@ -131,28 +165,50 @@ public class RegistroActivity extends AppCompatActivity {
         });
     }
 
+    private String convertImageToBase64() {
+        Bitmap bitmap = ((BitmapDrawable) imagePreview.getDrawable()).getBitmap();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+    // Manejar el resultado de la selección de imagen
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            // Obtener la Uri de la imagen seleccionada
+            Uri selectedImageUri = data.getData();
+
+            try {
+                // Convertir la Uri a Bitmap y mostrarlo en el ImageView
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                imagePreview.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     private void updateRegisterButtonState() {
-        // Obtener los valores de los campos
         String usuarioStr = usuario.getText().toString();
         String emailStr = email.getText().toString();
         String claveStr = clave.getText().toString();
         String claveRStr = claveR.getText().toString();
 
-        // Validar que ningún campo esté vacío y que la fortaleza de la contraseña sea suficiente
         boolean isNotEmpty = !usuarioStr.isEmpty() && !emailStr.isEmpty() && !claveStr.isEmpty() && !claveRStr.isEmpty();
         boolean isStrongEnough = calculateStrength(claveStr) >= 70;
-        // Habilitar el botón si se cumplen las condiciones
         btnInicio.setEnabled(isNotEmpty && isStrongEnough);
     }
+
     private void verificarContraseñas(String contraseña, String repetirContraseña) {
         if (!contraseña.equals(repetirContraseña)) {
-            // Las contraseñas no coinciden, muestra un mensaje de error
             Alert.show(getBaseContext(), "error", "Las contraseñas no coinciden", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
-        }else{
+        } else {
             Alert.show(getBaseContext(), "exito", "Contraseña Confirmada", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
-
         }
     }
+
     private void updateStrength(String password) {
         int strength = calculateStrength(password);
 
@@ -168,22 +224,18 @@ public class RegistroActivity extends AppCompatActivity {
     private int calculateStrength(String password) {
         int score = 0;
 
-        // Puntuar la longitud de la contraseña
         if (password.length() >= 8) {
             score += 10;
         }
 
-        // Puntuar letras mayúsculas y minúsculas
         if (password.matches(".*[a-z].*") && password.matches(".*[A-Z].*")) {
             score += 20;
         }
 
-        // Puntuar números
         if (password.matches(".*\\d.*")) {
             score += 20;
         }
 
-        // Puntuar caracteres especiales
         if (password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*")) {
             score += 30;
         }
@@ -193,17 +245,30 @@ public class RegistroActivity extends AppCompatActivity {
 
     private void getPreferencias() {
         if (!sharedPreferences.getString("usuario", "").isEmpty()) {
-            registrar(sharedPreferences.getString("usuario", ""), sharedPreferences.getString("clave", ""), sharedPreferences.getString("email", ""), sharedPreferences.getString("claveR", ""));
+            registrar(sharedPreferences.getString("usuario", ""), sharedPreferences.getString("clave", ""), sharedPreferences.getString("email", ""), sharedPreferences.getString("claveR", ""), sharedPreferences.getString("fotoPerfil", ""));
         } else {
             layoutPB.setVisibility(View.GONE);
         }
     }
 
-    private void registrar(String usuario, String clave, String claveR, String email) {
-        verificarDisponibilidad(usuario, email,clave);
+    private void registrar(String usuario, String clave, String claveR, String email, String fotoPerfil) {
+        verificarDisponibilidad(usuario, email, clave, fotoPerfil);
     }
 
-    private void verificarDisponibilidad(String usuario, String email, String clave) {
+    private void abrirActividadPrincipal(String usuario, String email, String fotoPerfil) {
+        // Guardar información del usuario en SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("usuario", usuario);
+        editor.putString("email", email);
+        editor.putString("fotoPerfil", fotoPerfil);
+        editor.apply();
+
+        // Abrir la actividad principal
+        Intent intent = new Intent(RegistroActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();  // Cierra la actividad actual para que el usuario no pueda volver atrás con el botón de retorno
+    }
+    private void verificarDisponibilidad(String usuario, String email, String clave, String fotoPerfil) {
         RequestParams params = new RequestParams();
         params.put("opcion", "verificarDisponibilidad");
         params.put("usu", usuario);
@@ -218,7 +283,8 @@ public class RegistroActivity extends AppCompatActivity {
                     boolean disponible = jsonResponse.optBoolean("disponible", false);
 
                     if (disponible) {
-                        registrarEnServidor(usuario, email, clave);
+                        registrarYVerificarCorreo(email, clave,usuario,fotoPerfil);
+                        registrarEnServidor(usuario, email, clave, fotoPerfil);
                     } else {
                         String mensaje = jsonResponse.optString("mensaje", "Usuario o correo no disponibles");
                         Alert.show(getBaseContext(), "error", mensaje, Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
@@ -236,12 +302,13 @@ public class RegistroActivity extends AppCompatActivity {
         });
     }
 
-    private void registrarEnServidor(String usuario, String email, String clave) {
+    private void registrarEnServidor(String usuario, String email, String clave, String fotoPerfil) {
         RequestParams params = new RequestParams();
         params.put("opcion", "registrar");
         params.put("usu", usuario);
         params.put("email", email);
         params.put("clave", clave);
+        params.put("fotoPerfil", fotoPerfil); // Cambio: Agregar la URL de la foto de perfil a los parámetros
         params.put("id", "");
 
         AsyncHttpClient client = new AsyncHttpClient();
@@ -254,29 +321,16 @@ public class RegistroActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
-                    // Convertir la respuesta a una cadena
                     String response = new String(responseBody, "UTF-8");
-
-                    // Parsear la respuesta JSON
                     JSONObject jsonResponse = new JSONObject(response);
 
-                    // Verificar si el usuario se registró correctamente
                     boolean disponible = jsonResponse.getBoolean("disponible");
                     if (disponible) {
                         Alert.show(getBaseContext(), "exito", "Usuario Creado Correctamente", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
-                        // Crear un Intent para navegar a LoginActivity
                         Intent intent = new Intent(RegistroActivity.this, LoginActivity.class);
-
-                        // Agregar datos del usuario a la intención
                         intent.putExtra("usuario", usuario);
-
-
-                        // Iniciar la actividad de inicio de sesión
                         startActivity(intent);
-
-                        // Finalizar la actividad actual
                         finish();
-
                     } else {
                         String mensaje = jsonResponse.getString("mensaje");
                         Alert.show(getBaseContext(), "error", mensaje, Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
@@ -299,24 +353,51 @@ public class RegistroActivity extends AppCompatActivity {
         });
     }
 
-    public static class AnimationUtilas {
-        public static void animateFadeOut(final View view) {
-            Animation fadeOutAnimation = AnimationUtils.loadAnimation(view.getContext(), android.R.anim.fade_out);
-            fadeOutAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
+    private void registrarYVerificarCorreo(String correoElectronico, String contraseña, String nombre, String fotoPerfil) {
+        auth.createUserWithEmailAndPassword(correoElectronico, contraseña)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = auth.getCurrentUser();
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    view.setVisibility(View.INVISIBLE);
-                }
+                            // Agrega el nombre y la foto de perfil a la base de datos de Firebase
+                            DatabaseReference usuariosRef = FirebaseDatabase.getInstance().getReference();
+                            String userId = user.getUid();
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-            view.startAnimation(fadeOutAnimation);
-        }
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("idUser", userId);
+                            map.put("name", nombre);
+                            map.put("foto", fotoPerfil);
+
+                            Usuario nuevoUsuario = new Usuario(fotoPerfil, nombre, correoElectronico);
+                            usuariosRef.child(userId).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task2) {
+                                    if (task2.isSuccessful()) {
+                                        // Iniciar sesión después del registro exitoso
+                                        abrirActividadPrincipal(nombre, correoElectronico, fotoPerfil);
+                                    } else {
+                                        Alert.show(getBaseContext(), "error", "Error al registrar Datos Firebase", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                                    }
+                                }
+                            });
+
+                            user.sendEmailVerification()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Alert.show(getBaseContext(), "exito", "Correo de verificación enviado", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                                            } else {
+                                                Alert.show(getBaseContext(), "exito", "Error al enviar el correo de verificación", Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                                            }
+                                        }
+                                    });
+                        } else {
+                            Alert.show(getBaseContext(), "exito", "Error al registrar al usuario: " + task.getException().getMessage(), Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                        }
+                    }
+                });
     }
 }

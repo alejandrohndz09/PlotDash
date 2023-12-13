@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1061845651558",
+    "project_id": "plotdash-fef5f",
+    "storage_bucket": "plotdash-fef5f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061845651558:android:6dd1ce0f53792828eddda7",
+        "android_client_info": {
+          "package_name": "com.flavio.plotdash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoi-e8lGTD-HJ9eo5M5jnb6dvPAVDJZZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

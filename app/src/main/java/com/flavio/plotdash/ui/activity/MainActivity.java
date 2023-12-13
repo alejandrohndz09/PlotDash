@@ -1,11 +1,5 @@
 package com.flavio.plotdash.ui.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,41 +12,69 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.flavio.dao.DaoUsuario;
 import com.flavio.plotdash.R;
 import com.flavio.plotdash.model.Usuario;
+import com.flavio.plotdash.ui.activity.LoginActivity;
 import com.flavio.plotdash.ui.fragment.BibliotecaFragment;
 import com.flavio.plotdash.ui.fragment.HistoriasFragment;
 import com.flavio.plotdash.ui.fragment.HomeFragment;
 import com.flavio.plotdash.ui.adapter.AdapterVistaPrincipal;
 import com.flavio.plotdash.ui.fragment.SettingFragment;
+import com.flavio.plotdash.ui.util.Alert;
 import com.flavio.plotdash.ui.util.BitmapManage;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+import cz.msebera.android.httpclient.Header;
 
+public class MainActivity extends AppCompatActivity {
+    // public static String URL_BASE = "http://192.168.1.5/plotdashserver/pages/";
+    //public final static String URL_BASE = "http://plotdash.free.nf/plotdashserver/pages/";
+    //public final static String URL_BASE = "https://plotdash.000webhostapp.com/plotdashserver/pages/";
+    public static String url = null;
+    public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
+    //public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
     public static Usuario usuario;
     SharedPreferences sharedPreferences;
     ViewPager2 pagerMain;
     Dialog dialog;
-    // public static String URL_BASE = "http://192.168.1.5/plotdashserver/pages/";
-    //public final static String URL_BASE = "http://plotdash.free.nf/plotdashserver/pages/";
-    //public final static String URL_BASE = "https://plotdash.000webhostapp.com/plotdashserver/pages/";
-
-    public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
-    //public final static String URL_BASE = "http://ingenieria.software.sistemascsc.com/plotdashserver/pages/";
     BottomNavigationView bmNav;
-    ArrayList<Fragment> fragArray = new ArrayList<Fragment>();
+    DatabaseReference mData;
+    String nombre;
+    String foto;
+    ArrayList<Fragment> fragArray = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferences = getSharedPreferences("datos", Context.MODE_PRIVATE);
-        //getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
         dialog = new Dialog(this);
         pagerMain = findViewById(R.id.pagerMain);
@@ -61,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         fragArray.add(new BibliotecaFragment());
         fragArray.add(new HistoriasFragment());
         fragArray.add(new SettingFragment());
+
         AdapterVistaPrincipal adapterViewPage = new AdapterVistaPrincipal(this, fragArray);
         pagerMain.setAdapter(adapterViewPage);
 
@@ -84,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageSelected(position);
             }
         });
+
+
         bmNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -104,7 +129,41 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
+
+
         });
+
+
+
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        mData= FirebaseDatabase.getInstance().getReference();
+
+        if (currentUser != null) {
+            // El usuario está autenticado, puedes acceder a la información del usuario
+            String userEmail = currentUser.getEmail();
+            String userId = currentUser.getUid();
+            iniciar(userEmail);
+           mData.child(userId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    String nom = snapshot.child("name").getValue().toString();
+                     foto = snapshot.child("foto").getValue().toString();
+                }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
+        }
+
     }
 
 
@@ -113,11 +172,39 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.options_menu, menu);
         MenuItem op = menu.findItem(R.id.profile);
         //String url = "https://img.a.transfermarkt.technology/portrait/big/8198-1685035469.png?lm=1";
-        String url = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-        if (!usuario.getFoto().isEmpty()
-                && !usuario.getFoto().equals("null")) {
-            url = usuario.getFoto();
+         url = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        mData= FirebaseDatabase.getInstance().getReference();
+
+        if (currentUser != null) {
+            // El usuario está autenticado, puedes acceder a la información del usuario
+            String userEmail = currentUser.getEmail();
+            String userId = currentUser.getUid();
+            iniciar(userEmail);
+            mData.child(userId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        String nom = snapshot.child("name").getValue().toString();
+                        String fotos = snapshot.child("foto").getValue().toString();
+                        if (!fotos.isEmpty() ) {
+                            url = fotos;
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
         }
+
         BitmapManage.convertGlideImageToDrawableOrBitmap(this, url, new BitmapManage.ImageConversionCallback() {
             @Override
             public void onImageConverted(Drawable drawable) {
@@ -126,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
         });
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -162,5 +248,37 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
         }
         return true;
+    }
+
+    private void iniciar(String correo) {
+        RequestParams parametros = new RequestParams();
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        parametros.put("opcion", "inicioSesion");
+        parametros.put("correo", correo);
+
+        client.setTimeout(3000);
+
+        client.post(DaoUsuario.URL, parametros, new AsyncHttpResponseHandler() {
+
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                if (statusCode == 200) {
+                    if (DaoUsuario.obtenerList(new String(responseBody)).size() > 0) {
+                        MainActivity.usuario = DaoUsuario.obtenerList(new String(responseBody)).get(0);
+                        Alert.show(getBaseContext(), "error", ""+MainActivity.usuario.getIdUsuario(),Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+
+                    } else {
+                        Alert.show(getBaseContext(), "error", "Credenciales Incorrectas",Toast.LENGTH_SHORT, (ViewGroup) getLayoutInflater().inflate(R.layout.util_toast, findViewById(R.id.toastCustom)));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+
+
+        });
     }
 }
