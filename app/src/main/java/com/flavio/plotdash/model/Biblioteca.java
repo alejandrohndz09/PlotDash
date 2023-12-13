@@ -1,15 +1,22 @@
 package com.flavio.plotdash.model;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class Biblioteca {
-    private int idBiblioteca, idHistoria, idUsuario;
+    private int idBiblioteca,  idUsuario;
 
     private  String nombre;
     private LocalDateTime fecha_creacion;
     private int tipo;
+    private ArrayList<DetalleBiblioteca> detalles;
 
 
 
@@ -17,9 +24,8 @@ public class Biblioteca {
     public Biblioteca() {
     }
 
-    public Biblioteca(int idBiblioteca, int idHistoria, int idUsuario, String nombre, LocalDateTime fecha_creacion, int tipo) {
+    public Biblioteca(int idBiblioteca, int idUsuario, String nombre, LocalDateTime fecha_creacion, int tipo) {
         this.idBiblioteca = idBiblioteca;
-        this.idHistoria = idHistoria;
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.fecha_creacion = fecha_creacion;
@@ -32,14 +38,6 @@ public class Biblioteca {
 
     public void setIdBiblioteca(int idBiblioteca) {
         this.idBiblioteca = idBiblioteca;
-    }
-
-    public int getIdHistoria() {
-        return idHistoria;
-    }
-
-    public void setIdHistoria(int idHistoria) {
-        this.idHistoria = idHistoria;
     }
 
     public int getIdUsuario() {
@@ -72,5 +70,38 @@ public class Biblioteca {
 
     public void setTipo(int tipo) {
         this.tipo = tipo;
+    }
+
+    public ArrayList<DetalleBiblioteca> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(ArrayList<DetalleBiblioteca> detalles) {
+        this.detalles = detalles;
+    }
+
+    public  String getFechaCreacionFormateada() {
+        LocalDateTime dateTimeToCompare=this.fecha_creacion;
+
+        ZoneId timeZone = ZoneId.of("America/El_Salvador");
+        ZonedDateTime now = ZonedDateTime.now(timeZone);
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(dateTimeToCompare, timeZone);
+        Duration duration = Duration.between(zonedDateTime, now);
+
+        if (duration.toDays() < 1) {
+            if (duration.toMinutes() < 1) {
+                return "unos momentos";
+            } else if (duration.toHours() < 1) {
+                long minutes = duration.toMinutes();
+                return minutes + "min";
+            }else {
+                long hours = duration.toHours();
+                return hours + "h";
+            }
+        } else if (zonedDateTime.toLocalDate().getYear() < now.toLocalDate().getYear()) {
+            return zonedDateTime.format(DateTimeFormatter.ofPattern("d 'de' MMM", new Locale("es", "ES")));
+        } else {
+            return zonedDateTime.format(DateTimeFormatter.ofPattern("d 'de' MMM", new Locale("es", "ES")));
+        }
     }
 }
